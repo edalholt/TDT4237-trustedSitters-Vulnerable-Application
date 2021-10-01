@@ -7,4 +7,4 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    phonenumber = models.CharField(max_length=15, blank=True)
+    pass
