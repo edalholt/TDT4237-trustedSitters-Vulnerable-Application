@@ -6,4 +6,5 @@ from .models import Advert
 class AdvertSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advert
-        fields = ('owner', 'date', 'content')
+        fields = ('id', 'owner', 'date', 'content', 'advertType')
+        read_only_fields = ['owner', 'advertType']
