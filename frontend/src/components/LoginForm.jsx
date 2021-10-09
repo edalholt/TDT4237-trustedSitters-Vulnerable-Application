@@ -46,10 +46,13 @@ const LoginForm = ({ setUser }) => {
         username: username,
         password: password,
       });
-
       setUser(response.user);
+      window.localStorage.setItem("user", JSON.stringify(response.user));
       window.localStorage.setItem("refresh_token", response.refresh);
       window.localStorage.setItem("access_token", response.access);
+      console.log("Signed in successfully");
+      setUsername("");
+      setPassword("");
     } catch (err) {
       setSnackbarOpen(true);
       setUsernameErrorText("Wrong username or password");
@@ -60,10 +63,15 @@ const LoginForm = ({ setUser }) => {
     <>
       <Container maxWidth='xs'>
         <form onSubmit={onSubmit}>
-          <Stack spacing={2}>
+          <Stack spacing={2} padding={2}>
+            <img
+              alt='logo'
+              src='https://cdn.pixabay.com/photo/2014/08/15/22/27/house-insurance-419058_960_720.jpg'
+            />
             <TextField
               label='Username'
               onInput={(e) => setUsername(e.target.value)}
+              value={username}
               error={!!usernameErrorText}
               helperText={usernameErrorText}
             />
@@ -72,6 +80,7 @@ const LoginForm = ({ setUser }) => {
               label='Password'
               type='password'
               onInput={(e) => setPassword(e.target.value)}
+              value={password}
               error={!!passwordErrorText}
               helperText={passwordErrorText}
             ></TextField>
