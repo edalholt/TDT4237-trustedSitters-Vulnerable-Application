@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -50,9 +51,19 @@ const App = () => {
                   Sign Out
                 </Button>
               ) : (
-                <Button color='inherit' component={Link} to='/login'>
-                  Sign In
-                </Button>
+                <div>
+                  <Button color='inherit' component={Link} to='/login'>
+                    Sign In
+                  </Button>
+                  <Button
+                    variant='outlined'
+                    color='inherit'
+                    component={Link}
+                    to='/signup'
+                  >
+                    Sign up
+                  </Button>
+                </div>
               )}
             </Grid>
           </Grid>
@@ -62,6 +73,9 @@ const App = () => {
         <Switch>
           <Route path='/login'>
             <LoginForm setUser={setUser} />
+          </Route>
+          <Route path='/signup'>
+            <SignupForm setUser={setUser} />
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
         </Switch>

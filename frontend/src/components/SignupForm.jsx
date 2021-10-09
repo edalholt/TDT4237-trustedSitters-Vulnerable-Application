@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/material";
@@ -7,19 +8,20 @@ import authService from "../services/auth";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Link from "@mui/material/Link";
-import { useHistory } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const LoginForm = ({ setUser }) => {
+const SignupForm = ({ setUser }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [usernameErrorText, setUsernameErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -30,36 +32,27 @@ const LoginForm = ({ setUser }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!username) {
-      setUsernameErrorText("Please enter username");
-    } else {
-      setUsernameErrorText("");
-    }
-    if (!password) {
-      setPasswordErrorText("Please enter password");
-    } else {
-      setPasswordErrorText("");
-    }
 
-    if (!username || !password) {
-      return;
-    }
     try {
-      const response = await authService.login({
+      const response = await authService.createUser({
         username: username,
+        email: email,
         password: password,
       });
       setUser(response.user);
       window.localStorage.setItem("user", JSON.stringify(response.user));
       window.localStorage.setItem("refresh_token", response.refresh);
       window.localStorage.setItem("access_token", response.access);
-      console.log("Signed in successfully");
+      console.log("User registered successfully");
       setUsername("");
+      setEmail("");
       setPassword("");
     } catch (err) {
       setSnackbarOpen(true);
-      setUsernameErrorText("Wrong username or password");
-      setPasswordErrorText("Wrong username or password");
+      let msg = "";
+      Object.values(err.response.data).forEach((x) => (msg += x));
+      console.log(err.response);
+      setSnackbarText(msg);
     }
   };
   return (
@@ -79,6 +72,13 @@ const LoginForm = ({ setUser }) => {
               error={!!usernameErrorText}
               helperText={usernameErrorText}
             />
+            <TextField
+              required
+              label='E-mail'
+              onInput={(e) => setEmail(e.target.value)}
+              value={email}
+              type='email'
+            />
 
             <TextField
               required
@@ -90,14 +90,14 @@ const LoginForm = ({ setUser }) => {
               helperText={passwordErrorText}
             ></TextField>
             <Button variant='contained' type='submit'>
-              Sign In
+              Sign Up
             </Button>
             <Link
               component='button'
               underline='hover'
-              onClick={() => history.push("/signup")}
+              onClick={() => history.push("/login")}
             >
-              Not registered? Click here to sign up!
+              Already registered? Click here to sign in!
             </Link>
           </Stack>
         </form>
@@ -108,7 +108,7 @@ const LoginForm = ({ setUser }) => {
           onClose={handleClose}
         >
           <Alert onClose={handleClose} severity='error' sx={{ width: "100%" }}>
-            Login Failed! Please check you credentials.
+            {snackbarText}
           </Alert>
         </Snackbar>
       </Container>
@@ -116,4 +116,4 @@ const LoginForm = ({ setUser }) => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;
