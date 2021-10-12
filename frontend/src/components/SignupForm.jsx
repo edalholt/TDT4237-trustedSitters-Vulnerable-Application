@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/material";
 import Container from "@mui/material/Container";
-import authService from "../services/auth";
+import AuthService from "../services/auth";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Link from "@mui/material/Link";
@@ -30,30 +30,33 @@ const SignupForm = ({ setUser }) => {
     setSnackbarOpen(false);
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit =  (e) => {
     e.preventDefault();
 
-    try {
-      const response = await authService.createUser({
-        username: username,
-        email: email,
-        password: password,
-      });
-      setUser(response.user);
-      window.localStorage.setItem("user", JSON.stringify(response.user));
-      window.localStorage.setItem("refresh_token", response.refresh);
-      window.localStorage.setItem("access_token", response.access);
-      console.log("User registered successfully");
-      setUsername("");
-      setEmail("");
-      setPassword("");
-    } catch (err) {
-      setSnackbarOpen(true);
-      let msg = "";
-      Object.values(err.response.data).forEach((x) => (msg += x));
-      console.log(err.response);
+    const request = {username: username,
+      email: email,
+      password: password,}
+      AuthService.createUser(request).then((response) => {
+        console.log("User registered successfully");
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        
+      }).catch((err) => {
+        let msg = "";
+      if (err.response){
+        Object.values(err.response.data).forEach((x) => (msg += x));
+        console.log(err.response);
+
+      }
+      else{
+        msg = "Failed to get response from server."
+      }
       setSnackbarText(msg);
-    }
+      setSnackbarOpen(true);
+      })
+        
+   
   };
   return (
     <>

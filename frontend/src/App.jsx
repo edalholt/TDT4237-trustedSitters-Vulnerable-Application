@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
+import Adverts from "./components/Adverts";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -29,37 +30,37 @@ const App = () => {
 
   return (
     <Router>
-      <AppBar position='static'>
+      <AppBar position="static">
         <Toolbar>
           <Grid container>
             <Grid item>
-              <Button color='inherit' component={Link} to='/adverts'>
+              <Button color="inherit" component={Link} to="/adverts">
                 adverts
               </Button>
-              <Button color='inherit' component={Link} to='/children'>
+              <Button color="inherit" component={Link} to="/children">
                 children
               </Button>
-              <Button color='inherit' component={Link} to='/offers'>
+              <Button color="inherit" component={Link} to="/offers">
                 offers
               </Button>
             </Grid>
           </Grid>
-          <Grid container justifyContent='flex-end'>
+          <Grid container justifyContent="flex-end">
             <Grid item>
               {user ? (
-                <Button color='inherit' onClick={signOut}>
+                <Button color="inherit" onClick={signOut}>
                   Sign Out
                 </Button>
               ) : (
                 <div>
-                  <Button color='inherit' component={Link} to='/login'>
+                  <Button color="inherit" component={Link} to="/login">
                     Sign In
                   </Button>
                   <Button
-                    variant='outlined'
-                    color='inherit'
+                    variant="outlined"
+                    color="inherit"
                     component={Link}
-                    to='/signup'
+                    to="/signup"
                   >
                     Sign up
                   </Button>
@@ -69,15 +70,21 @@ const App = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Container maxWidth='md'>
+      <Container maxWidth="md">
         <Switch>
-          <Route path='/login'>
+          <Route path="/login">
             <LoginForm setUser={setUser} />
           </Route>
-          <Route path='/signup'>
+          <Route path="/signup">
             <SignupForm setUser={setUser} />
           </Route>
-          <Route path='/'>{/* <Home /> */}</Route>
+          <Route path="/adverts">
+            
+            <Adverts />
+          </Route>
+          <Route path="/">
+            {/* <Home /> */}
+            </Route>
         </Switch>
       </Container>
     </Router>

@@ -1,14 +1,38 @@
-import axios from "axios";
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+import api from "./api";
+import TokenService from "./token";
 
-const createUser = async (credentials) => {
-  const response = await axios.post(`/register/`, credentials);
-  return response.data;
+const createUser = (credentials) => {
+  return api.post(`/register/`, credentials).then((response) => {
+    if (response.data.access) {
+      TokenService.setUser(response.data.user);
+      TokenService.updateLocalAccessToken(response.data.access);
+      TokenService.setLocalRefreshToken(response.data.refresh);
+    }
+
+    return response.data;
+  });
 };
 
-const login = async (credentials) => {
-  const response = await axios.post(`/login/`, credentials);
-  return response.data;
+const login = (credentials) => {
+  return api.post("/login/", credentials).then((response) => {
+    if (response.data.access) {
+      TokenService.setUser(response.data.user);
+      TokenService.updateLocalAccessToken(response.data.access);
+      TokenService.setLocalRefreshToken(response.data.refresh);
+    }
+
+    return response.data;
+  });
 };
 
-export default { createUser, login };
+const logout = () => {
+  TokenService.removeUser();
+};
+
+const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
+
+const Authservice = { createUser, login, logout, getCurrentUser };
+
+export default Authservice;
