@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const Advert = ({content}) => {
+const Advert = ({ advertType, content }) => {
   return (
     <Card>
       <CardContent>
@@ -13,14 +13,12 @@ const Advert = ({content}) => {
           dd.mm.yyyy
         </Typography>
         <Typography variant="h5" component="div">
-          Need babysitter
+          {advertType}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           time start -- Time end
         </Typography>
-        <Typography variant="body2">
-          {content}
-        </Typography>
+        <Typography variant="body2">{content}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small">Make offer</Button>

@@ -12,13 +12,13 @@ const Adverts = () => {
   const [adverts, setAdverts] = useState(null);
 
   const fabStyle = {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     right: 20,
   };
   useEffect(() => {
     console.log("effect");
-    AdvertsService.GetNeedSitterAdverts().then((ads) => setAdverts(ads));
+    AdvertsService.GetAllAdverts().then((ads) => setAdverts(ads));
   }, []);
 
   return (
@@ -28,13 +28,16 @@ const Adverts = () => {
       </Typography>
       <Fab sx={fabStyle} variant="extended" color="secondary" aria-label="add">
         <AddIcon sx={{ mr: 1 }} />
-            Create new advert
+        Create new advert
       </Fab>
-      
+
       <Grid container spacing={1.5} justifyContent="center">
         {adverts?.map((advert) => (
-          <Grid item xs={3}>
-            <Advert content={advert.content}></Advert>
+          <Grid key={advert.id} item xs={3}>
+            <Advert
+              advertType={advert.advertType}
+              content={advert.content}
+            ></Advert>
           </Grid>
         ))}
       </Grid>

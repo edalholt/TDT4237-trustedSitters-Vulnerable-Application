@@ -17,4 +17,7 @@ class Advert(models.Model):
 
     content = models.TextField()
 
-    date = models.DateTimeField(blank=False)
+    date = models.DateField(blank=False)
+
+    start_time = models.TimeField(null=True)
+    end_time = models.TimeField(null=True)
