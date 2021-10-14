@@ -7,9 +7,14 @@ import Advert from "./Advert";
 import AdvertsService from "../services/adverts";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import EditAdvert from "./EditAdvert";
+import Modal from "@mui/material/Modal";
 
 const Adverts = () => {
   const [adverts, setAdverts] = useState(null);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const fabStyle = {
     position: "absolute",
@@ -23,24 +28,35 @@ const Adverts = () => {
 
   return (
     <Container>
-      <Typography sx={{ textAlign: "center" }} variant="h2">
+      <Typography sx={{ textAlign: "center" }} variant='h2'>
         Adverts
       </Typography>
-      <Fab sx={fabStyle} variant="extended" color="secondary" aria-label="add">
+      <Fab
+        sx={fabStyle}
+        variant='extended'
+        color='secondary'
+        aria-label='add'
+        onClick={handleOpen}
+      >
         <AddIcon sx={{ mr: 1 }} />
         Create new advert
       </Fab>
 
-      <Grid container spacing={1.5} justifyContent="center">
+      <Grid container spacing={1.5} justifyContent='center'>
         {adverts?.map((advert) => (
           <Grid key={advert.id} item xs={3}>
-            <Advert
-              advertType={advert.advertType}
-              content={advert.content}
-            ></Advert>
+            <Advert advert={advert}></Advert>
           </Grid>
         ))}
       </Grid>
+      <Modal open={open} onClose={handleClose}>
+        <EditAdvert
+          action={"Create"}
+          title={"Create Advert"}
+          handleClose={handleClose}
+          setOpen={setOpen}
+        ></EditAdvert>
+      </Modal>
     </Container>
   );
 };
