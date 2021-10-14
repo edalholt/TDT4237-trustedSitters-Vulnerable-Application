@@ -34,7 +34,8 @@ const EditAdvert = (props) => {
     borderRadius: 2,
   };
 
-  const buttonClick = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     const request = {
       date: date.toISOString().substring(0, 10),
       start_time: startTime?.toTimeString().substring(0, 8),
@@ -73,73 +74,76 @@ const EditAdvert = (props) => {
       <Typography sx={{ textAlign: "center" }} variant='h3'>
         {props.title}
       </Typography>
-      <FormControl component='fieldset'>
-        <FormLabel component='legend'>Type</FormLabel>
-        <RadioGroup row aria-label='type' onChange={handleSelect}>
-          <FormControlLabel
-            value='ND_SITTER'
-            control={<Radio />}
-            label='Need Babysitter'
-          />
-          <FormControlLabel
-            value='IS_SITTER'
-            control={<Radio />}
-            label='Is Babysitter'
-          />
-        </RadioGroup>
-      </FormControl>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Stack spacing={2} padding={2}>
-          <TextField
-            multiline
-            minRows={2}
-            onInput={(e) => setContent(e.target.value)}
-            value={content}
-            label={"Description"}
-          />
+      <form onSubmit={onSubmit}>
+        <FormControl component='fieldset'>
+          <FormLabel component='legend'>Type</FormLabel>
+          <RadioGroup row aria-label='type' onChange={handleSelect}>
+            <FormControlLabel
+              value='ND_SITTER'
+              control={<Radio required />}
+              label='Need Babysitter'
+            />
+            <FormControlLabel
+              value='IS_SITTER'
+              control={<Radio required />}
+              label='Is Babysitter'
+            />
+          </RadioGroup>
+        </FormControl>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Stack spacing={2} padding={2}>
+            <TextField
+              multiline
+              minRows={2}
+              onInput={(e) => setContent(e.target.value)}
+              value={content}
+              label={"Description"}
+              required
+            />
 
-          <DatePicker
-            label='Date'
-            value={date}
-            onChange={(newValue) => {
-              setDate(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-          <Stack spacing={2} direction='row' justifyContent='center'>
-            <TimePicker
-              ampm={false}
-              label='Start Time'
-              value={startTime}
+            <DatePicker
+              label='Date'
+              value={date}
               onChange={(newValue) => {
-                setStartTime(newValue);
+                setDate(newValue);
               }}
               renderInput={(params) => <TextField {...params} />}
             />
-            <TimePicker
-              ampm={false}
-              label='End Time'
-              value={endTime}
-              onChange={(newValue) => {
-                setEndTime(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
+            <Stack spacing={2} direction='row' justifyContent='center'>
+              <TimePicker
+                ampm={false}
+                label='Start Time'
+                value={startTime}
+                onChange={(newValue) => {
+                  setStartTime(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <TimePicker
+                ampm={false}
+                label='End Time'
+                value={endTime}
+                onChange={(newValue) => {
+                  setEndTime(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </Stack>
+            <Stack spacing={2} direction='row' justifyContent='center'>
+              <Button
+                variant='contained'
+                color='error'
+                onClick={props.handleClose}
+              >
+                Cancel
+              </Button>
+              <Button variant='contained' color='success' type='submit'>
+                {props.action}
+              </Button>
+            </Stack>
           </Stack>
-          <Stack spacing={2} direction='row' justifyContent='center'>
-            <Button
-              variant='contained'
-              color='error'
-              onClick={props.handleClose}
-            >
-              Cancel
-            </Button>
-            <Button variant='contained' color='success' onClick={buttonClick}>
-              {props.action}
-            </Button>
-          </Stack>
-        </Stack>
-      </LocalizationProvider>
+        </LocalizationProvider>
+      </form>
     </Box>
   );
 };
