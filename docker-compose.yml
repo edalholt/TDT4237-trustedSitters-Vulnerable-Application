@@ -19,7 +19,7 @@ services:
       context: frontend/
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 5000:5000
     networks:
       backend_bridge:
         ipv4_address: 10.90.0.5
