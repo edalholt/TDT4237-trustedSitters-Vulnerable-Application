@@ -4,6 +4,6 @@
 
 python manage.py migrate
 
-python manage.py collectstatic
+python manage.py collectstatic --noinput
 
 gunicorn trustedsitters.wsgi --log-file - -b 0.0.0.0:8000

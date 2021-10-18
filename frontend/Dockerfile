@@ -1,28 +1,31 @@
-# pull official base image
+# Pull official base image
 FROM node:16-alpine3.14
 
-# install react essentials
-RUN npm install react-scripts@4.0.3 -g
+# Enable bash
+RUN apk add --no-cache bash
 
-# set working directory
+# Install react essentials
+RUN npm install react-scripts@4.0.3 -g && npm install -g serve
+
+# Set working directory
 WORKDIR /app
 
-# create app dir
+# Create app dir
 RUN chown node:node /app
 
-# use unprivileged user
+# Use unprivileged user
 USER node
 
-# add `/app/node_modules/.bin` to $PATH
+# Add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
-# install app dependencies
+# Install app dependencies
 COPY --chown=node:node package.json ./
 COPY --chown=node:node package-lock.json ./
 RUN npm install
 
-# add app
-COPY . ./
+# Add app
+COPY --chown=node:node . ./
 
-# start app
-CMD ["npm", "start"]
+# Start app
+CMD ["/bin/bash", "entrypoint.sh"]

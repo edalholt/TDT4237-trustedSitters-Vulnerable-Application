@@ -5,7 +5,7 @@ FROM python:3.8.5-alpine
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-# Inable bash
+# Enable bash
 RUN apk add --no-cache bash
 
 # Install psycopg2 dependencies

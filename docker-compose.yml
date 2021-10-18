@@ -9,6 +9,9 @@ services:
       dockerfile: Dockerfile
     ports: 
       - 8000:8000
+    networks:
+      backend_bridge:
+        ipv4_address: 10.90.0.4
         
   frontend:
     container_name: frontend_group_XXX
@@ -17,4 +20,24 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    networks:
+      backend_bridge:
+        ipv4_address: 10.90.0.5
 
+  gateway:
+    container_name: gateway_group_XXX
+    build:
+      context: nginx/
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      backend_bridge:
+        ipv4_address: 10.90.0.6
+
+networks:  
+  backend_bridge:
+    driver: bridge
+    ipam:
+        config:
+          - subnet: 10.90.0.0/18
