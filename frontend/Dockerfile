@@ -1,16 +1,17 @@
 # pull official base image
 FROM node:16-alpine3.14
 
+# install react essentials
 RUN npm install react-scripts@4.0.3 -g
 
 # set working directory
 WORKDIR /app
 
+# create app dir
 RUN chown node:node /app
 
+# use unprivileged user
 USER node
-
-RUN whoami
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
