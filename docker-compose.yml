@@ -1,6 +1,15 @@
 
 
 services:
+
+  backend:
+    container_name: backend_group_XXX
+    build:
+      context: backend/
+      dockerfile: Dockerfile
+    ports: 
+      - 8000:8000
+        
   frontend:
     container_name: frontend_group_XXX
     build:
@@ -8,3 +17,4 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+
