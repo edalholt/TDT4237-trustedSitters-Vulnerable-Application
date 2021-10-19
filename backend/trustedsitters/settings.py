@@ -38,6 +38,8 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     # Allow requests from node app in development
     "http://localhost:3000",
+    # Allow requests from node app in production
+    "http://localhost:5000",
 ]
 
 # Application definition

@@ -1,6 +1,9 @@
 # Pull official base image
 FROM node:16-alpine3.14
 
+# Fetch argument for API endpoint
+ARG REACT_APP_API_URL
+
 # Enable bash
 RUN apk add --no-cache bash
 
