@@ -26,11 +26,9 @@ SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    # Hosts for local development without docker
-    '127.0.0.1', 
-    'localhost', 
-    # Hosts for local development with docker
-    '10.190.0.6',
+    # Hosts for local development
+    '127.0.0.1',
+    'localhost',
     # Hosts for production
     'molde.idi.ntnu.no',
     ]
