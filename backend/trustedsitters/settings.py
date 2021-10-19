@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost', 
     # Hosts for local development with docker
-    '10.90.0.4',
+    '10.190.0.6',
     # Hosts for production
     'molde.idi.ntnu.no',
     ]

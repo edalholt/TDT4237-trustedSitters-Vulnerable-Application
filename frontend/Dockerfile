@@ -27,5 +27,8 @@ RUN npm install
 # Add app
 COPY --chown=node:node . ./
 
+# Set the host variable in default.js (overwrite)
+RUN echo "REACT_APP_API_URL='${REACT_APP_API_URL}'" > ./.env
+
 # Start app
 CMD ["/bin/bash", "entrypoint.sh"]

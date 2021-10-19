@@ -3,41 +3,46 @@ version: '3'
 services:
 
   backend:
-    container_name: backend_group_XXX
+    container_name: backend_group_${GROUP_ID}
     build:
       context: backend/
       dockerfile: Dockerfile
-    ports: 
+    ports:
       - 8000:8000
     networks:
       backend_bridge:
-        ipv4_address: 10.90.0.4
+        ipv4_address: 10.${GROUP_ID}.0.4
         
   frontend:
-    container_name: frontend_group_XXX
+    container_name: frontend_group_${GROUP_ID}
     build:
       context: frontend/
       dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
     ports:
       - 5000:5000
     networks:
       backend_bridge:
-        ipv4_address: 10.90.0.5
+        ipv4_address: 10.${GROUP_ID}.0.5
 
   gateway:
-    container_name: gateway_group_XXX
+    container_name: gateway_group_${GROUP_ID}
     build:
       context: nginx/
       dockerfile: Dockerfile
     ports:
-      - 80:80
+      - ${PORT_PREFIX}${GROUP_ID}:80
+    environment:
+      - GROUP_ID=${GROUP_ID}
+      - PORT_PREFIX=${PORT_PREFIX}
     networks:
       backend_bridge:
-        ipv4_address: 10.90.0.6
+        ipv4_address: 10.${GROUP_ID}.0.6
 
 networks:  
   backend_bridge:
     driver: bridge
     ipam:
         config:
-          - subnet: 10.90.0.0/18
+          - subnet: 10.${GROUP_ID}.0.0/18
