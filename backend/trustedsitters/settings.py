@@ -26,17 +26,18 @@ SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    # Hosts for local development without docker
     '127.0.0.1', 
     'localhost', 
-    # Allow NGINX
+    # Hosts for local development with docker
     '10.90.0.4',
+    # Hosts for production
+    'molde.idi.ntnu.no',
     ]
 
 CORS_ALLOWED_ORIGINS = [
     # Allow requests from node app in development
     "http://localhost:3000",
-    # Allow requests from NGINX in deployment
-    "http://localhost:90",
 ]
 
 # Application definition
