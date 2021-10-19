@@ -17,7 +17,9 @@ services:
       context: frontend/
       dockerfile: Dockerfile
       args:
-        REACT_APP_API_URL: ${REACT_APP_API_URL}
+        - GROUP_ID=${GROUP_ID}
+        - PORT_PREFIX=${PORT_PREFIX}
+        - DOMAIN=${DOMAIN}
     networks:
       backend_bridge:
         ipv4_address: 10.${GROUP_ID}.0.5
@@ -32,6 +34,7 @@ services:
     environment:
       - GROUP_ID=${GROUP_ID}
       - PORT_PREFIX=${PORT_PREFIX}
+      - DOMAIN=${DOMAIN}
     networks:
       backend_bridge:
         ipv4_address: 10.${GROUP_ID}.0.6

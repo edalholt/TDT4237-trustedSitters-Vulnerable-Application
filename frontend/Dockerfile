@@ -2,7 +2,9 @@
 FROM node:16-alpine3.14
 
 # Fetch argument for API endpoint
-ARG REACT_APP_API_URL
+ARG GROUP_ID
+ARG PORT_PREFIX
+ARG DOMAIN
 
 # Enable bash
 RUN apk add --no-cache bash
@@ -31,7 +33,7 @@ RUN npm install
 COPY --chown=node:node . ./
 
 # Set the host variable in default.js (overwrite)
-RUN echo "REACT_APP_API_URL='${REACT_APP_API_URL}'" > ./.env
+RUN echo "REACT_APP_API_URL='http://${DOMAIN}:${PORT_PREFIX}${GROUP_ID}/api'" > ./.env
 
 # Start app
 CMD ["/bin/bash", "entrypoint.sh"]
