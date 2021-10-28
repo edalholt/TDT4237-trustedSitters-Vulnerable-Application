@@ -9,7 +9,7 @@ import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-const Advert = ({ advert }) => {
+const Advert = ({ advert, user }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -28,14 +28,20 @@ const Advert = ({ advert }) => {
           </Typography>
           <Typography variant='body2'>{advert.content}</Typography>
         </CardContent>
+
         <CardActions>
           <Button size='small'>Make offer</Button>
-          <IconButton size='small' onClick={handleOpen}>
-            <EditIcon />
-          </IconButton>
-          <IconButton size='small'>
-            <DeleteIcon />
-          </IconButton>
+
+          {user?.id === advert.owner ? (
+            <div>
+              <IconButton size='small' onClick={handleOpen}>
+                <EditIcon />
+              </IconButton>
+              <IconButton size='small'>
+                <DeleteIcon />
+              </IconButton>
+            </div>
+          ) : null}
         </CardActions>
       </Card>
       <Modal open={open} onClose={handleClose}>

@@ -10,7 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import EditAdvert from "./EditAdvert";
 import Modal from "@mui/material/Modal";
 
-const Adverts = () => {
+const Adverts = ({ user }) => {
   const [adverts, setAdverts] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -45,7 +45,7 @@ const Adverts = () => {
       <Grid container spacing={1.5} justifyContent='center'>
         {adverts?.map((advert) => (
           <Grid key={advert.id} item xs={3}>
-            <Advert advert={advert}></Advert>
+            <Advert user={user} advert={advert}></Advert>
           </Grid>
         ))}
       </Grid>

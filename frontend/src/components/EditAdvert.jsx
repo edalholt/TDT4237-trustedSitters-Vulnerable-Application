@@ -63,6 +63,12 @@ const EditAdvert = (props) => {
       }
     } else if (props.action === "Edit") {
       // TODO: Send Patch request
+      AdvertsService.EditAdvert(props.advert.id, request)
+        .then((response) => {
+          // TODO: Popup snackbar with confirmation message, and re render the Adverts page
+          props.setOpen(false);
+        })
+        .catch((err) => console.log(err.response.data));
     }
   };
 
@@ -77,18 +83,22 @@ const EditAdvert = (props) => {
       <form onSubmit={onSubmit}>
         <FormControl component='fieldset'>
           <FormLabel component='legend'>Type</FormLabel>
-          <RadioGroup row aria-label='type' onChange={handleSelect}>
-            <FormControlLabel
-              value='ND_SITTER'
-              control={<Radio required />}
-              label='Need Babysitter'
-            />
-            <FormControlLabel
-              value='IS_SITTER'
-              control={<Radio required />}
-              label='Is Babysitter'
-            />
-          </RadioGroup>
+          {props.action === "Create" ? (
+            <RadioGroup row aria-label='type' onChange={handleSelect}>
+              <FormControlLabel
+                value='ND_SITTER'
+                control={<Radio required />}
+                label='Need Babysitter'
+              />
+              <FormControlLabel
+                value='IS_SITTER'
+                control={<Radio required />}
+                label='Is Babysitter'
+              />
+            </RadioGroup>
+          ) : (
+            props.advert?.advertType
+          )}
         </FormControl>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Stack spacing={2} padding={2}>

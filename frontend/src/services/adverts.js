@@ -25,12 +25,17 @@ const CreateNeedSitterAdvert = (data) => {
   return request.then((response) => response.data);
 };
 
+const EditAdvert = (id, data) => {
+  const request = api.patch(`/adverts/${id}/`, data);
+  return request.then((response) => response.data);
+};
 const AdvertsService = {
   GetAllAdverts,
   GetNeedSitterAdverts,
   GetIsSitterAdverts,
   CreateIsSitterAdvert,
   CreateNeedSitterAdvert,
+  EditAdvert,
 };
 
 export default AdvertsService;
