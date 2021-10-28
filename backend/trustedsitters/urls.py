@@ -21,5 +21,5 @@ urlpatterns = [
     path('', include('apps.users.urls')),
     path('', include('apps.adverts.urls')),
     path('', include('apps.children.urls')),
-    # path('', include('apps.offers.urls'))
+    path('', include('apps.offers.urls'))
 ]
