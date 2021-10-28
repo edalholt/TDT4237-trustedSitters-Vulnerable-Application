@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.adverts.apps.AdvertsConfig',
     'apps.users.apps.UsersConfig',
+    'apps.children.apps.ChildrenConfig',
+    'apps.offers.apps.OffersConfig',
 ]
 
 MIDDLEWARE = [
