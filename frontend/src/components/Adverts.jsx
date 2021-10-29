@@ -45,7 +45,12 @@ const Adverts = ({ user }) => {
       <Grid container spacing={1.5} justifyContent='center'>
         {adverts?.map((advert) => (
           <Grid key={advert.id} item xs={3}>
-            <Advert user={user} advert={advert}></Advert>
+            <Advert
+              adverts={adverts}
+              setAdverts={setAdverts}
+              user={user}
+              advert={advert}
+            ></Advert>
           </Grid>
         ))}
       </Grid>
@@ -55,6 +60,8 @@ const Adverts = ({ user }) => {
           title={"Create Advert"}
           handleClose={handleClose}
           setOpen={setOpen}
+          adverts={adverts}
+          setAdverts={setAdverts}
         ></EditAdvert>
       </Modal>
     </Container>

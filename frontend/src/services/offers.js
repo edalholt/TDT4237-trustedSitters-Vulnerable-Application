@@ -11,10 +11,10 @@ const CreateOffer = (data) => {
 };
 
 const AnswerOffer = (data) => {
-  const request = api.patch("/offer_answer/", data);
+  const request = api.post("/offer_answer/", data);
   return request.then((response) => response.data);
 };
 
-const ChildrenService = { GetOffers, CreateOffer, AnswerOffer };
+const OfferService = { GetOffers, CreateOffer, AnswerOffer };
 
-export default ChildrenService;
+export default OfferService;

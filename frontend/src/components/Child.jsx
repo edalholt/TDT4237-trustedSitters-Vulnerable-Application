@@ -20,8 +20,7 @@ const Child = ({ child, user, children, setChildren }) => {
           <Typography variant='h5' component='div'>
             {child.name}
           </Typography>
-
-          <Typography variant='body2'>{child.info}</Typography>
+          <div dangerouslySetInnerHTML={{ __html: child.info }}></div>
         </CardContent>
 
         <CardActions>

@@ -30,11 +30,11 @@ class IsSitterAdvertViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user,
                         advertType=AdvertType.IS_SITTER)
 
-# ViewSet for getting all the Adverts
+# ViewSet for all the Adverts
 
 
 class AdvertViewSet(viewsets.ModelViewSet):
-    queryset = Advert.objects.raw('SELECT * FROM adverts_advert')
+    queryset = Advert.objects.all()
     serializer_class = AdvertSerializer
     http_method_names = ['get', 'head', 'patch']
     permission_classes = [IsOwnerOrReadOnly &

@@ -10,7 +10,7 @@ import Link from "@mui/material/Link";
 import { useHistory } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
 const LoginForm = ({ setUser }) => {
@@ -52,10 +52,11 @@ const LoginForm = ({ setUser }) => {
         console.log("Signed in successfully");
         setUsername("");
         setPassword("");
-        setUser(response.user)
+        setUser(response.user);
+        history.push("/adverts");
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         setSnackbarOpen(true);
         setUsernameErrorText("Wrong username or password");
         setPasswordErrorText("Wrong username or password");
@@ -63,16 +64,16 @@ const LoginForm = ({ setUser }) => {
   };
   return (
     <>
-      <Container maxWidth="xs">
+      <Container maxWidth='xs'>
         <form onSubmit={onSubmit}>
           <Stack spacing={2} padding={2}>
             <img
-              alt="logo"
-              src="https://cdn.pixabay.com/photo/2014/08/15/22/27/house-insurance-419058_960_720.jpg"
+              alt='logo'
+              src='https://cdn.pixabay.com/photo/2014/08/15/22/27/house-insurance-419058_960_720.jpg'
             />
             <TextField
               required
-              label="Username"
+              label='Username'
               onInput={(e) => setUsername(e.target.value)}
               value={username}
               error={!!usernameErrorText}
@@ -81,19 +82,19 @@ const LoginForm = ({ setUser }) => {
 
             <TextField
               required
-              label="Password"
-              type="password"
+              label='Password'
+              type='password'
               onInput={(e) => setPassword(e.target.value)}
               value={password}
               error={!!passwordErrorText}
               helperText={passwordErrorText}
             ></TextField>
-            <Button variant="contained" type="submit">
+            <Button variant='contained' type='submit'>
               Sign In
             </Button>
             <Link
-              component="button"
-              underline="hover"
+              component='button'
+              underline='hover'
               onClick={() => history.push("/signup")}
             >
               Not registered? Click here to sign up!
@@ -106,7 +107,7 @@ const LoginForm = ({ setUser }) => {
           autoHideDuration={5000}
           onClose={handleClose}
         >
-          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          <Alert onClose={handleClose} severity='error' sx={{ width: "100%" }}>
             Login Failed! Please check you credentials.
           </Alert>
         </Snackbar>

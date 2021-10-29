@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Container from "@mui/material/Container";
 import AppBar from "@mui/material/AppBar";
 import Grid from "@mui/material/Grid";
-
+import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Adverts from "./components/Adverts";
 import Children from "./components/Children";
+import Offers from "./components/Offers";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -34,22 +35,29 @@ const App = () => {
       <AppBar position='static'>
         <Toolbar>
           <Grid container>
-            <Grid item>
-              <Button color='inherit' component={Link} to='/adverts'>
-                adverts
-              </Button>
-              <Button color='inherit' component={Link} to='/children'>
-                children
-              </Button>
-              <Button color='inherit' component={Link} to='/offers'>
-                offers
-              </Button>
-            </Grid>
+            {user ? (
+              <Grid item>
+                <Button color='inherit' component={Link} to='/adverts'>
+                  adverts
+                </Button>
+                <Button color='inherit' component={Link} to='/children'>
+                  children
+                </Button>
+                <Button color='inherit' component={Link} to='/offers'>
+                  offers
+                </Button>
+              </Grid>
+            ) : null}
           </Grid>
           <Grid container justifyContent='flex-end'>
             <Grid item>
               {user ? (
-                <Button color='inherit' onClick={signOut}>
+                <Button
+                  color='inherit'
+                  onClick={signOut}
+                  component={Link}
+                  to='/login'
+                >
                   Sign Out
                 </Button>
               ) : (
@@ -84,6 +92,9 @@ const App = () => {
           </Route>
           <Route path='/children'>
             <Children user={user} />
+          </Route>
+          <Route path='/offers'>
+            <Offers user={user} />
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
         </Switch>

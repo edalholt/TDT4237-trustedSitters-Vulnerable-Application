@@ -42,12 +42,12 @@ const EditChild = (props) => {
     } else if (props.action === "Edit") {
       // TODO: Send Patch request
       ChildrenService.EditChild(props.child.id, request)
-        .then((response) => {
+        .then((editChild) => {
           // TODO: Popup snackbar with confirmation message
-          console.log(response);
+
           let t = props.children.filter((c) => c.id !== props.child.id);
 
-          props.setChildren(t.concat(response));
+          props.setChildren(t.concat(editChild));
           props.setOpen(false);
         })
         .catch((err) => console.log(err.response?.data));
