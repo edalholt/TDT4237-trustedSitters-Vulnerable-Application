@@ -9,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Adverts from "./components/Adverts";
+import Children from "./components/Children";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -80,6 +81,9 @@ const App = () => {
           </Route>
           <Route path='/adverts'>
             <Adverts user={user} />
+          </Route>
+          <Route path='/children'>
+            <Children user={user} />
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
         </Switch>

@@ -5,7 +5,6 @@ class IsParentOrReadOnly(permissions.BasePermission):
 
     """
     Object-level permission to only allow owners of an object to edit it.
-    Assumes the model instance has an `owner` attribute.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -14,5 +13,4 @@ class IsParentOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # Instance must have an attribute named `owner`.
         return obj.parent == request.user

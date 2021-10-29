@@ -6,7 +6,7 @@ from .permissions import IsParentOrReadOnly
 
 
 class ChildViewSet(viewsets.ModelViewSet):
-    queryset = Child.objects.raw('SELECT * FROM children_child')
+    queryset = Child.objects.all()
     serializer_class = ChildSerializer
     permission_classes = [IsParentOrReadOnly, ]
 

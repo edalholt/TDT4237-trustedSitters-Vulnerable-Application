@@ -59,10 +59,6 @@ class AnswerOfferView(generics.GenericAPIView):
             if state == 'A':  # Accepted offer
                 offer.status = OfferStatus.ACCEPTED
 
-                if offer.offerType == OfferType.JOB_OFFER:
-                    # TODO make contract
-                    pass
-
                 if offer.offerType == OfferType.GUARDIAN_OFFER:
                     parent = get_user_model().objects.get(username=offer.recipient)
                     children = Child.objects.filter(parent=parent)
