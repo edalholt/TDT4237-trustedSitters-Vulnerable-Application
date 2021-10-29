@@ -30,15 +30,15 @@ const Offers = ({ user }) => {
   };
   return (
     <Container>
-      <Stack spacing={2} direction='row' justifyContent='center'>
+      <Stack spacing={2} margin={5} direction='row' justifyContent='center'>
         <TextField
           onInput={(e) => setRecipient(e.target.value)}
           value={recipient}
           label={"Offer Recipient Username"}
           required
         />
-        <Button variant='contained' onClick={sendOffer}>
-          Send offer
+        <Button variant='contained' color='secondary' onClick={sendOffer}>
+          Send Guardian offer
         </Button>
       </Stack>
       <Typography sx={{ textAlign: "center" }} variant='h3'>
@@ -50,7 +50,11 @@ const Offers = ({ user }) => {
           ?.filter((o) => o.status === "P")
           .map((o) => (
             <Grid key={o.id} item xs={3}>
-              <Offer offer={o} user={user}></Offer>
+              <Offer
+                onUpdate={() => handleUpdate()}
+                offer={o}
+                user={user}
+              ></Offer>
             </Grid>
           ))}
       </Grid>
