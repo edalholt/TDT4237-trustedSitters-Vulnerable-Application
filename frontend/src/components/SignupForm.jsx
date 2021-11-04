@@ -30,33 +30,29 @@ const SignupForm = ({ setUser }) => {
     setSnackbarOpen(false);
   };
 
-  const onSubmit =  (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
-    const request = {username: username,
-      email: email,
-      password: password,}
-      AuthService.createUser(request).then((response) => {
+    const request = { username: username, email: email, password: password };
+    AuthService.createUser(request)
+      .then((response) => {
         console.log("User registered successfully");
         setUsername("");
         setEmail("");
         setPassword("");
-        
-      }).catch((err) => {
-        let msg = "";
-      if (err.response){
-        Object.values(err.response.data).forEach((x) => (msg += x));
-        console.log(err.response);
-
-      }
-      else{
-        msg = "Failed to get response from server."
-      }
-      setSnackbarText(msg);
-      setSnackbarOpen(true);
+        // TODO send verification email
       })
-        
-   
+      .catch((err) => {
+        let msg = "";
+        if (err.response) {
+          Object.values(err.response.data).forEach((x) => (msg += x));
+          console.log(err.response);
+        } else {
+          msg = "Failed to get response from server.";
+        }
+        setSnackbarText(msg);
+        setSnackbarOpen(true);
+      });
   };
   return (
     <>

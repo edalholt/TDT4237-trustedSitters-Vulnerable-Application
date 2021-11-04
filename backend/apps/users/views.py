@@ -15,10 +15,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_superuser:  # Admin users can see info of every user
-            return get_user_model().objects.all()
+            return get_user_model().objects.raw('SELECT * FROM users_user')
         else:
             # Normal users only see information about themselves
-            return get_user_model().objects.filter(id=self.request.user.id)
+            return get_user_model().objects.raw('SELECT * FROM users_user WHERE id = %s', [self.request.user.id])
 
 
 class RegistrationViewSet(viewsets.ModelViewSet, TokenObtainPairView):

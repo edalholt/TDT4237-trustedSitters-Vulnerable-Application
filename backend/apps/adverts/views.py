@@ -5,7 +5,8 @@ from .permissions import IsOwnerOrReadOnly
 
 
 class NeedSitterAdvertViewSet(viewsets.ModelViewSet):
-    queryset = Advert.objects.filter(advertType=AdvertType.NEED_SITTER)
+    queryset = Advert.objects.raw(
+        'SELECT * FROM adverts_advert WHERE advertType = %s', [AdvertType.NEED_SITTER])
 
     serializer_class = AdvertSerializer
     permission_classes = [IsOwnerOrReadOnly &
@@ -17,7 +18,8 @@ class NeedSitterAdvertViewSet(viewsets.ModelViewSet):
 
 
 class IsSitterAdvertViewSet(viewsets.ModelViewSet):
-    queryset = Advert.objects.filter(advertType=AdvertType.IS_SITTER)
+    queryset = Advert.objects.raw(
+        'SELECT * FROM adverts_advert WHERE advertType = %s', [AdvertType.IS_SITTER])
 
     serializer_class = AdvertSerializer
 
@@ -28,10 +30,12 @@ class IsSitterAdvertViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user,
                         advertType=AdvertType.IS_SITTER)
 
-# ViewSet for getting all the Adverts
+# ViewSet for all the Adverts
+
+
 class AdvertViewSet(viewsets.ModelViewSet):
     queryset = Advert.objects.all()
     serializer_class = AdvertSerializer
-    http_method_names = ['get', 'head']
+    http_method_names = ['get', 'head', 'patch']
     permission_classes = [IsOwnerOrReadOnly &
                           permissions.IsAuthenticated]

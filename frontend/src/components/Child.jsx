@@ -4,12 +4,12 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import EditAdvert from "./EditAdvert";
+import EditChild from "./EditChild";
 import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-const Advert = ({ advert, user, setAdverts, adverts }) => {
+const Child = ({ child, user, children, setChildren }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -17,22 +17,14 @@ const Advert = ({ advert, user, setAdverts, adverts }) => {
     <>
       <Card>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
-            {advert.date}
-          </Typography>
           <Typography variant='h5' component='div'>
-            {advert.advertType}
+            {child.name}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-            {advert.start_time} -- {advert.end_time}
-          </Typography>
-          <Typography variant='body2'>{advert.content}</Typography>
+          <div dangerouslySetInnerHTML={{ __html: child.info }}></div>
         </CardContent>
 
         <CardActions>
-          <Button size='small'>Make offer</Button>
-
-          {user?.id === advert.owner ? (
+          {user?.id === child.parent ? (
             <div>
               <IconButton size='small' onClick={handleOpen}>
                 <EditIcon />
@@ -45,18 +37,18 @@ const Advert = ({ advert, user, setAdverts, adverts }) => {
         </CardActions>
       </Card>
       <Modal open={open} onClose={handleClose}>
-        <EditAdvert
+        <EditChild
+          children={children}
+          setChildren={setChildren}
           action={"Edit"}
-          title={"Edit Advert"}
+          title={"Edit Child Entry"}
           handleClose={handleClose}
-          advert={advert}
+          child={child}
           setOpen={setOpen}
-          adverts={adverts}
-          setAdverts={setAdverts}
-        ></EditAdvert>
+        ></EditChild>
       </Modal>
     </>
   );
 };
 
-export default Advert;
+export default Child;

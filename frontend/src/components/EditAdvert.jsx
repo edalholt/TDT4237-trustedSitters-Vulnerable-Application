@@ -46,15 +46,17 @@ const EditAdvert = (props) => {
       console.log(request);
       if (type === "IS_SITTER") {
         AdvertsService.CreateIsSitterAdvert(request)
-          .then((response) => {
-            // TODO: Popup snackbar with confirmation message, and re render the Adverts page
+          .then((newAdvert) => {
+            // TODO: Popup snackbar with confirmation message
+            props.setAdverts(props.adverts.concat(newAdvert));
             props.setOpen(false);
           })
           .catch((err) => console.log(err.response.data));
       } else if (type === "ND_SITTER") {
         AdvertsService.CreateNeedSitterAdvert(request)
-          .then((response) => {
-            // TODO: Popup snackbar with confirmation message, and re render the Adverts page
+          .then((newAdvert) => {
+            // TODO: Popup snackbar with confirmation message
+            props.setAdverts(props.adverts.concat(newAdvert));
             props.setOpen(false);
           })
           .catch((err) => console.log(err.response.data));
@@ -63,6 +65,14 @@ const EditAdvert = (props) => {
       }
     } else if (props.action === "Edit") {
       // TODO: Send Patch request
+      AdvertsService.EditAdvert(props.advert.id, request)
+        .then((editedAdvert) => {
+          // TODO: Popup snackbar with confirmation message
+          let ads = props.adverts.filter((ad) => ad.id !== props.advert.id);
+          props.setAdverts(ads.concat(editedAdvert));
+          props.setOpen(false);
+        })
+        .catch((err) => console.log(err.response.data));
     }
   };
 
@@ -77,18 +87,22 @@ const EditAdvert = (props) => {
       <form onSubmit={onSubmit}>
         <FormControl component='fieldset'>
           <FormLabel component='legend'>Type</FormLabel>
-          <RadioGroup row aria-label='type' onChange={handleSelect}>
-            <FormControlLabel
-              value='ND_SITTER'
-              control={<Radio required />}
-              label='Need Babysitter'
-            />
-            <FormControlLabel
-              value='IS_SITTER'
-              control={<Radio required />}
-              label='Is Babysitter'
-            />
-          </RadioGroup>
+          {props.action === "Create" ? (
+            <RadioGroup row aria-label='type' onChange={handleSelect}>
+              <FormControlLabel
+                value='ND_SITTER'
+                control={<Radio required />}
+                label='Need Babysitter'
+              />
+              <FormControlLabel
+                value='IS_SITTER'
+                control={<Radio required />}
+                label='Is Babysitter'
+              />
+            </RadioGroup>
+          ) : (
+            props.advert?.advertType
+          )}
         </FormControl>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Stack spacing={2} padding={2}>

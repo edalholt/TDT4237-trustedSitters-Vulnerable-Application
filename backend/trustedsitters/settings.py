@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.adverts.apps.AdvertsConfig',
     'apps.users.apps.UsersConfig',
+    'apps.children.apps.ChildrenConfig',
+    'apps.offers.apps.OffersConfig',
 ]
 
 MIDDLEWARE = [
@@ -147,7 +149,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
