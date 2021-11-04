@@ -1,5 +1,5 @@
 # Pull official base image
-FROM node:16-alpine3.14
+FROM node:16.13-alpine3.14
 
 # Fetch argument for API endpoint
 ARG GROUP_ID
@@ -27,7 +27,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 # Install app dependencies
 COPY --chown=node:node package.json ./
 COPY --chown=node:node package-lock.json ./
-RUN npm install
+RUN npm ci
 
 # Add app
 COPY --chown=node:node . ./
