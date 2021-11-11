@@ -5,6 +5,10 @@ from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
+from django.core.mail import EmailMessage
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,6 +46,25 @@ class RegisterSerializer(UserSerializer):
 
     def create(self, validated_data):
         user = get_user_model().objects.create_user(**validated_data)
+        user.is_active = False
+        print(user.username, user.is_active)
+        user.save()
+        email = validated_data["email"]
+        email_subject = "Activate your account"
+        uid = user.pk
+        domain = get_current_site(self.context["request"])
+        link = reverse('verify-email', kwargs={"uid": uid})
+
+        url = f"http://{domain}{link}"
+
+        mail = EmailMessage(
+            email_subject,
+            url,
+            None,
+            [email],
+        )
+        mail.send(fail_silently=False)
+
         return user
 
     def validate(self, data):

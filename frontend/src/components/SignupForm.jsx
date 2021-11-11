@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const SignupForm = ({ setUser }) => {
+const SignupForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -37,10 +37,13 @@ const SignupForm = ({ setUser }) => {
     AuthService.createUser(request)
       .then((response) => {
         console.log("User registered successfully");
+        setAppSnackbarText(
+          "If the email exist, an activation link has been sent."
+        );
+        setAppSnackbarOpen(true);
         setUsername("");
         setEmail("");
         setPassword("");
-        // TODO send verification email
       })
       .catch((err) => {
         let msg = "";

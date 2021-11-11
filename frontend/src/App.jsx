@@ -11,6 +11,8 @@ import SignupForm from "./components/SignupForm";
 import Adverts from "./components/Adverts";
 import Children from "./components/Children";
 import Offers from "./components/Offers";
+import Verified from "./components/Verified";
+import Invalid from "./components/Invalid";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
@@ -104,7 +106,11 @@ const App = () => {
             />
           </Route>
           <Route path='/signup'>
-            <SignupForm setUser={setUser} />
+            <SignupForm
+              setAppSnackbarOpen={setSnackbarOpen}
+              setAppSnackbarText={setSnackbarText}
+              setUser={setUser}
+            />
           </Route>
           <Route path='/adverts'>
             <Adverts user={user} />
@@ -114,6 +120,12 @@ const App = () => {
           </Route>
           <Route path='/offers'>
             <Offers user={user} />
+          </Route>
+          <Route path='/verified'>
+            <Verified />
+          </Route>
+          <Route path='/invalid'>
+            <Invalid />
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
         </Switch>
