@@ -2,9 +2,10 @@ from django.db.models import Q
 from rest_framework import permissions, viewsets, generics, status
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-from .models import Offer, OfferStatus, OfferType
+from .models import Offer, OfferStatus, OfferType, Contract
 from apps.children.models import Child
-from .serializers import OfferSerializer
+from apps.adverts.models import Advert, AdvertType
+from .serializers import OfferSerializer, ContractSerializer
 from .permissions import IsSenderOrReceiver
 from rest_framework.response import Response
 
@@ -42,6 +43,33 @@ class OfferViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class ContractViewSet(viewsets.ModelViewSet):
+
+    serializer_class = ContractSerializer
+
+    http_method_names = ['get', 'head']
+
+    def get_queryset(self):
+        queryset = Contract.objects.filter(
+            Q(parent=self.request.user) | Q(sitter=self.request.user))
+
+        return queryset
+
+
+class FinishContractView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        if request.data.get('contractId'):
+            contract = Contract.objects.get(id=request.data.get('contractId'))
+            if request.user == contract.parent:
+                contract.finished = True
+                contract.save()
+                return Response({'success': True, 'message': 'Contract finished'}, status=status.HTTP_200_OK)
+
+        return Response({'success': False, 'message': 'Only parents can mark the contract as finished.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class AnswerOfferView(generics.GenericAPIView):
 
     def post(self, request):
@@ -70,6 +98,22 @@ class AnswerOfferView(generics.GenericAPIView):
                     for child in children:
                         child.guardians.add(sender)
                         child.save()
+                if offer.offerType == OfferType.JOB_OFFER:
+                    ad = offer.advert  # Advert.objects.get(offer.advert)
+                    if ad.advertType == AdvertType.IS_SITTER:
+                        parent = get_user_model().objects.get(username=offer.sender)
+                        sitter = get_user_model().objects.get(username=offer.recipient)
+
+                    if ad.advertType == AdvertType.NEED_SITTER:
+                        parent = get_user_model().objects.get(username=offer.recipient)
+                        sitter = get_user_model().objects.get(username=offer.sender)
+
+                    contract = Contract(
+                        parent=parent, sitter=sitter, date=ad.date, start_time=ad.start_time, end_time=ad.end_time, content=ad.content)
+                    ad.save()
+                    contract.save()
+
+                    # ad.delete()
 
                 offer.save()
                 return Response({'success': True, 'message': 'Offer accepted'}, status=status.HTTP_200_OK)
