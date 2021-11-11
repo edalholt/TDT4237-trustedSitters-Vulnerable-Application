@@ -29,6 +29,11 @@ const EditAdvert = (id, data) => {
   const request = api.patch(`/adverts/${id}/`, data);
   return request.then((response) => response.data);
 };
+
+const DeleteAdvert = (id) => {
+  const request = api.delete(`/adverts/${id}/`);
+  return request.then((response) => response.data);
+};
 const AdvertsService = {
   GetAllAdverts,
   GetNeedSitterAdverts,
@@ -36,6 +41,7 @@ const AdvertsService = {
   CreateIsSitterAdvert,
   CreateNeedSitterAdvert,
   EditAdvert,
+  DeleteAdvert,
 };
 
 export default AdvertsService;

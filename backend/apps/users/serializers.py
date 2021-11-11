@@ -3,6 +3,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core import exceptions
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,3 +43,22 @@ class RegisterSerializer(UserSerializer):
     def create(self, validated_data):
         user = get_user_model().objects.create_user(**validated_data)
         return user
+
+    def validate(self, data):
+
+        # get the password from the data
+        password = data.get('password')
+
+        errors = dict()
+        try:
+            # validate the password and catch the exception
+            validate_password(password=password)
+
+        # the exception raised here is different than serializers.ValidationError
+        except exceptions.ValidationError as e:
+            errors['password'] = list(e.messages)
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return super(RegisterSerializer, self).validate(data)

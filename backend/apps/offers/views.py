@@ -25,8 +25,11 @@ class OfferViewSet(viewsets.ModelViewSet):
                 "SELECT * from users_user WHERE username = '%s'" % self.request.data['recipient'])
 
             if len(result) > 0:  # Check if a user exist with the given username
+                r = ""
+                for u in result:
+                    r += u.username + " "
                 serializer.save(
-                    recipient=result[0], sender=self.request.user)
+                    recipient=r.strip(), sender=self.request.user)
             else:
                 raise ValidationError("User does not exist")
         else:

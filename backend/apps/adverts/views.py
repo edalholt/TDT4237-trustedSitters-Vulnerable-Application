@@ -36,6 +36,6 @@ class IsSitterAdvertViewSet(viewsets.ModelViewSet):
 class AdvertViewSet(viewsets.ModelViewSet):
     queryset = Advert.objects.all()
     serializer_class = AdvertSerializer
-    http_method_names = ['get', 'head', 'patch']
+    http_method_names = ['get', 'head', 'patch', 'delete']
     permission_classes = [IsOwnerOrReadOnly &
                           permissions.IsAuthenticated]

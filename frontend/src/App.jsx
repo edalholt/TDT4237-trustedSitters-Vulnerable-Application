@@ -11,15 +11,30 @@ import SignupForm from "./components/SignupForm";
 import Adverts from "./components/Adverts";
 import Children from "./components/Children";
 import Offers from "./components/Offers";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
+});
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
 
   const signOut = () => {
     window.localStorage.removeItem("user");
     window.localStorage.removeItem("refresh_token");
     window.localStorage.removeItem("access_token");
     setUser(null);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   useEffect(() => {
@@ -82,7 +97,11 @@ const App = () => {
       <Container maxWidth='md'>
         <Switch>
           <Route path='/login'>
-            <LoginForm setUser={setUser} />
+            <LoginForm
+              setAppSnackbarOpen={setSnackbarOpen}
+              setAppSnackbarText={setSnackbarText}
+              setUser={setUser}
+            />
           </Route>
           <Route path='/signup'>
             <SignupForm setUser={setUser} />
@@ -98,6 +117,20 @@ const App = () => {
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
         </Switch>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={snackbarOpen}
+          autoHideDuration={5000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity='success'
+            sx={{ width: "100%" }}
+          >
+            {snackbarText}
+          </Alert>
+        </Snackbar>
       </Container>
     </Router>
   );

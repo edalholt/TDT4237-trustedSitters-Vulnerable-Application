@@ -9,10 +9,42 @@ import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-const Advert = ({ advert, user, setAdverts, adverts }) => {
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import AdvertsService from "../services/adverts";
+
+const Advert = ({
+  advert,
+  user,
+  setAdverts,
+  adverts,
+  setSnackbarOpen,
+  setSnackbarText,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const handleConfirmOpen = () => setConfirmOpen(true);
+  const handleConfirmClose = () => setConfirmOpen(false);
+
+  const deleteAdvert = (e) => {
+    e.preventDefault();
+    AdvertsService.DeleteAdvert(advert.id)
+      .then((response) => {
+        console.log("Advert deleted successfully");
+        setSnackbarText("Advert deleted successfully");
+        setSnackbarOpen(true);
+        setConfirmOpen(false);
+        setAdverts(adverts.filter((a) => a.id !== advert.id));
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <Card>
@@ -37,7 +69,7 @@ const Advert = ({ advert, user, setAdverts, adverts }) => {
               <IconButton size='small' onClick={handleOpen}>
                 <EditIcon />
               </IconButton>
-              <IconButton size='small'>
+              <IconButton size='small' onClick={handleConfirmOpen}>
                 <DeleteIcon />
               </IconButton>
             </div>
@@ -46,6 +78,8 @@ const Advert = ({ advert, user, setAdverts, adverts }) => {
       </Card>
       <Modal open={open} onClose={handleClose}>
         <EditAdvert
+          setSnackbarOpen={setSnackbarOpen}
+          setSnackbarText={setSnackbarText}
           action={"Edit"}
           title={"Edit Advert"}
           handleClose={handleClose}
@@ -55,6 +89,25 @@ const Advert = ({ advert, user, setAdverts, adverts }) => {
           setAdverts={setAdverts}
         ></EditAdvert>
       </Modal>
+      <Dialog
+        open={confirmOpen}
+        onClose={handleConfirmClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Detele advert?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete this advert? This cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmClose}>No</Button>
+          <Button onClick={deleteAdvert} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

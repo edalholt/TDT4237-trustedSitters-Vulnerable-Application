@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -54,6 +54,8 @@ const LoginForm = ({ setUser }) => {
         setPassword("");
         setUser(response.user);
         history.push("/adverts");
+        setAppSnackbarText("Signed in successfully");
+        setAppSnackbarOpen(true);
       })
       .catch((err) => {
         console.log(err);
