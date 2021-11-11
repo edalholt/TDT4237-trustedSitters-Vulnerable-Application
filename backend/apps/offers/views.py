@@ -25,6 +25,9 @@ class OfferViewSet(viewsets.ModelViewSet):
             result = get_user_model().objects.raw(
                 "SELECT * from users_user WHERE username = '%s'" % self.request.data['recipient'])
 
+            if self.request.user.username == self.request.data['recipient'].strip():
+                raise ValidationError("Cannot send offer to yourself")
+
             if len(result) > 0:  # Check if a user exist with the given username
                 r = ""
                 for u in result:

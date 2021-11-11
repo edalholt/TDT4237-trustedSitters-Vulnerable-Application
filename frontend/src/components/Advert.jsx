@@ -15,6 +15,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AdvertsService from "../services/adverts";
+import OfferService from "../services/offers";
 
 const Advert = ({
   advert,
@@ -32,6 +33,10 @@ const Advert = ({
   const handleConfirmOpen = () => setConfirmOpen(true);
   const handleConfirmClose = () => setConfirmOpen(false);
 
+  const [offerOpen, setOfferOpen] = useState(false);
+  const handleOfferOpen = () => setOfferOpen(true);
+  const handleOfferClose = () => setOfferOpen(false);
+
   const deleteAdvert = (e) => {
     e.preventDefault();
     AdvertsService.DeleteAdvert(advert.id)
@@ -41,6 +46,21 @@ const Advert = ({
         setSnackbarOpen(true);
         setConfirmOpen(false);
         setAdverts(adverts.filter((a) => a.id !== advert.id));
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const sendOffer = (e) => {
+    e.preventDefault();
+    OfferService.CreateOffer({
+      recipient: advert?.owner,
+      offerType: "JOB_OFFER",
+      advert: advert?.id,
+    })
+      .then((o) => {
+        setSnackbarText(`Offer sent to ${o.recipient}`);
+        setSnackbarOpen(true);
+        setOfferOpen(false);
       })
       .catch((err) => console.log(err));
   };
@@ -62,8 +82,6 @@ const Advert = ({
         </CardContent>
 
         <CardActions>
-          <Button size='small'>Make offer</Button>
-
           {user?.id === advert.owner ? (
             <div>
               <IconButton size='small' onClick={handleOpen}>
@@ -73,7 +91,11 @@ const Advert = ({
                 <DeleteIcon />
               </IconButton>
             </div>
-          ) : null}
+          ) : (
+            <Button onClick={handleOfferOpen} size='small'>
+              Make offer
+            </Button>
+          )}
         </CardActions>
       </Card>
       <Modal open={open} onClose={handleClose}>
@@ -95,7 +117,7 @@ const Advert = ({
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id='alert-dialog-title'>{"Detele advert?"}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{"Delete advert?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
             Are you sure you want to delete this advert? This cannot be undone.
@@ -104,6 +126,25 @@ const Advert = ({
         <DialogActions>
           <Button onClick={handleConfirmClose}>No</Button>
           <Button onClick={deleteAdvert} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={offerOpen}
+        onClose={handleOfferOpen}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Contract proposal"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Send offer to {advert?.owner}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleOfferClose}>No</Button>
+          <Button onClick={sendOffer} autoFocus>
             Yes
           </Button>
         </DialogActions>

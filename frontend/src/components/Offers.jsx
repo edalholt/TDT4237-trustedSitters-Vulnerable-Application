@@ -28,6 +28,7 @@ const Offers = ({ user }) => {
       .then((o) => setOffers(offers.concat(o)))
       .catch((err) => console.log(err));
   };
+
   return (
     <Container>
       <Stack spacing={2} margin={5} direction='row' justifyContent='center'>
