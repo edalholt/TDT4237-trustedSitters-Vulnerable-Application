@@ -18,7 +18,7 @@ class OfferStatus(models.TextChoices):
 
 class Offer(models.Model):
 
-    sender = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    sender = models.TextField()
     recipient = models.TextField()
     offerType = models.CharField(max_length=14,
                                  choices=OfferType.choices, default=OfferType.JOB_OFFER, blank=False)

@@ -5,4 +5,4 @@ class IsSenderOrReceiver(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
 
-        return obj.recipient == request.user.username or obj.sender == request.user
+        return obj.recipient == request.user.username or obj.sender == request.user.username

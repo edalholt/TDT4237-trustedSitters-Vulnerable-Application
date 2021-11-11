@@ -29,7 +29,7 @@ class OfferViewSet(viewsets.ModelViewSet):
                 for u in result:
                     r += u.username + " "
                 serializer.save(
-                    recipient=r.strip(), sender=self.request.user)
+                    recipient=r.strip(), sender=self.request.user.username)
             else:
                 raise ValidationError("User does not exist")
         else:
@@ -37,7 +37,7 @@ class OfferViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Offer.objects.filter(
-            Q(sender=self.request.user) | Q(recipient=self.request.user.username))
+            Q(sender=self.request.user.username) | Q(recipient=self.request.user.username))
 
         return queryset
 
@@ -65,9 +65,10 @@ class AnswerOfferView(generics.GenericAPIView):
                 if offer.offerType == OfferType.GUARDIAN_OFFER:
                     parent = get_user_model().objects.get(username=offer.recipient)
                     children = Child.objects.filter(parent=parent)
+                    sender = get_user_model().objects.get(username=offer.sender)
 
                     for child in children:
-                        child.guardians.add(offer.sender)
+                        child.guardians.add(sender)
                         child.save()
 
                 offer.save()
