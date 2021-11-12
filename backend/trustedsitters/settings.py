@@ -15,14 +15,20 @@ from pathlib import Path
 from datetime import timedelta
 import os.path
 
+# The PRODUCTION variable decides how the static files are handeled in wsgi.py
+# The variable is set to 'True' (string) when running with docker
+PRODUCTION = os.getenv('PRODUCTION', False)
 
-# Get the GROUPID variable to accept connections from the application server and NGINX
-GROUP_ID = os.environ.get("GROUP_ID", "80")
+# Get environment variables
+GROUP_ID = os.environ.get("GROUP_ID", "3000")
 PORT_PREFIX = os.environ.get("PORT_PREFIX", "")
 DOMAIN = os.environ.get("DOMAIN", "localhost")
 PROTOCOL = os.environ.get("PROTOCOL", "http")
 
 # Set the URL used for redirecting
+# URL in local development will not find environment variables and looks like: 'http://localhost:3000' (redirect to node)
+# URL in local production with docker can look like this: 'http://localhost:21190', where 190 is the GROUP_ID
+# URL in remote production with docker can look like this: 'http://molde.idi.ntnu.no:21190', where 190 is the GROUP_ID
 URL = PROTOCOL + '://' + DOMAIN + ':' + PORT_PREFIX + GROUP_ID
 
 # Email configuration
