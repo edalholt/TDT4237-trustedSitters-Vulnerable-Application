@@ -16,11 +16,8 @@ The following must be installed before running this application
 To run the backend server, run the following commands:
 
 - `cd backend`
-
 - `pip install -r requirements.txt`
-
 - `python manage.py migrate`
-
 - `python manage.py runserver`
 
 After installing once, you only need to run the `python manage.py runserver` command to start the django server
