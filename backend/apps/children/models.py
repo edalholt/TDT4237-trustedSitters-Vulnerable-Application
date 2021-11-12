@@ -14,3 +14,23 @@ class Child(models.Model):
         get_user_model(), related_name='children', blank=True)
 
     info = models.TextField()
+
+
+def child_directory_path(instance, filename):
+    """
+    Return the path for an child's file
+    :param instance: Current instance containing an child
+    :param filename: Name of the file
+    :return: Path of file as a string
+    """
+    return f"children/{instance.child.id}/{filename}"
+
+
+class ChildFile(models.Model):
+
+    child = models.ForeignKey(
+        Child, on_delete=models.CASCADE, blank=False, related_name='children_files')
+
+    file = models.FileField(upload_to=child_directory_path, blank=False)
+
+    content_type = models.CharField(max_length=64)
