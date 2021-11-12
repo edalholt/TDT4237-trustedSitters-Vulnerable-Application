@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from django.shortcuts import redirect
 from django.contrib.sites.shortcuts import get_current_site
 import os
-
+from django.conf import settings
 
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
@@ -80,10 +80,8 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
 
 class VerificationView(generics.GenericAPIView):
     def get(self, request, uid):
-        frontend_port = os.getenv("frontend_port", 3000)
-        domain = get_current_site(request).domain
-        verified_url = f"HTTP://{domain[:-4]}{frontend_port}/verified"
-        invalid_url = f"HTTP://{domain[:-4]}{frontend_port}/invalid"
+        verified_url = settings.URL + "/verified"
+        invalid_url = settings.URL + "/invalid"
         try:
             id = uid
             user = get_user_model().objects.get(pk=id)

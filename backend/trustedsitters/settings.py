@@ -17,7 +17,13 @@ import os.path
 
 
 # Get the GROUPID variable to accept connections from the application server and NGINX
-groupid = os.environ.get("GROUPID", "0")
+GROUP_ID = os.environ.get("GROUP_ID", "80")
+PORT_PREFIX = os.environ.get("PORT_PREFIX", "")
+DOMAIN = os.environ.get("DOMAIN", "localhost")
+PROTOCOL = os.environ.get("PROTOCOL", "http")
+
+# Set the URL used for redirecting
+URL = PROTOCOL + '://' + DOMAIN + ':' + PORT_PREFIX + GROUP_ID
 
 # Email configuration
 # The host must be running within NTNU's VPN (vpn.ntnu.no) to allow this config
@@ -26,7 +32,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.stud.ntnu.no"
 EMAIL_USE_TLS = False
 EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = "tdt4237-group" + groupid + " " + "<noreply@idi.ntnu.no>"
+DEFAULT_FROM_EMAIL = "tdt4237-group" + GROUP_ID + " " + "<noreply@idi.ntnu.no>"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
