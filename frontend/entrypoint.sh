@@ -4,4 +4,4 @@
 
 npm run-script build
 
-serve -s build
+serve -s build -l 5000
