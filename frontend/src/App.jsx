@@ -15,6 +15,7 @@ import Verified from "./components/Verified";
 import Invalid from "./components/Invalid";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Contracts from "./components/Contracts";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -62,6 +63,9 @@ const App = () => {
                 </Button>
                 <Button color='inherit' component={Link} to='/offers'>
                   offers
+                </Button>
+                <Button color='inherit' component={Link} to='/contracts'>
+                  contracts
                 </Button>
               </Grid>
             ) : null}
@@ -126,6 +130,9 @@ const App = () => {
           </Route>
           <Route path='/invalid'>
             <Invalid />
+          </Route>
+          <Route path='/contracts'>
+            <Contracts user={user} />
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
         </Switch>

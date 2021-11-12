@@ -132,7 +132,7 @@ const Advert = ({
       </Dialog>
       <Dialog
         open={offerOpen}
-        onClose={handleOfferOpen}
+        onClose={handleOfferClose}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
