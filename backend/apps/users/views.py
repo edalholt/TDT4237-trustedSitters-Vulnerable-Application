@@ -11,6 +11,7 @@ from django.contrib.sites.shortcuts import get_current_site
 import os
 from django.conf import settings
 
+
 class UserViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
     serializer_class = UserSerializer
@@ -79,15 +80,19 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
 
 
 class VerificationView(generics.GenericAPIView):
-    def get(self, request, uid):
+    def get(self, request, uid, status):
         verified_url = settings.URL + "/verified"
         invalid_url = settings.URL + "/invalid"
         try:
             id = uid
             user = get_user_model().objects.get(pk=id)
-
-            user.is_active = True
-            user.save()
+            if status == "1":
+                user.is_active = True
+                user.save()
+            else:
+                user.is_active = False
+                user.save()
+                return redirect(invalid_url)
 
             return redirect(verified_url)
 

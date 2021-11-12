@@ -1,5 +1,6 @@
 from rest_framework import serializers
-
+import pickle
+import base64
 from .models import Offer, Contract
 
 
@@ -16,7 +17,12 @@ class ContractSerializer(serializers.ModelSerializer):
     sitter = serializers.SlugRelatedField(
         read_only=True, slug_field='username')
 
+    contractId = serializers.SerializerMethodField()
+
     class Meta:
         model = Contract
-        fields = ('id', 'parent', 'sitter', 'content', 'date',
+        fields = ('id', 'parent', 'sitter', 'contractId', 'content', 'date',
                   'start_time', 'end_time', 'finished')
+
+    def get_contractId(self, obj):
+        return base64.b64encode(pickle.dumps(obj.id))

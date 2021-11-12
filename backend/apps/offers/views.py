@@ -8,7 +8,8 @@ from apps.adverts.models import Advert, AdvertType
 from .serializers import OfferSerializer, ContractSerializer
 from .permissions import IsSenderOrReceiver
 from rest_framework.response import Response
-
+import pickle
+import base64
 # Create your views here.
 
 
@@ -64,7 +65,9 @@ class FinishContractView(generics.GenericAPIView):
 
     def post(self, request):
         if request.data.get('contractId'):
-            contract = Contract.objects.get(id=request.data.get('contractId'))
+            cId = base64.b64decode(request.data.get('contractId'))
+            cId = pickle.loads(cId)
+            contract = Contract.objects.get(id=cId)
             if request.user == contract.parent:
                 contract.finished = True
                 contract.save()

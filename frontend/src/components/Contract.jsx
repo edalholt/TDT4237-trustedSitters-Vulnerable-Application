@@ -15,7 +15,7 @@ const Contract = ({ user, contract }) => {
   const finishContract = (e) => {
     e.preventDefault();
 
-    ContractsService.FinishContract({ contractId: contract.id })
+    ContractsService.FinishContract({ contractId: contract.contractId })
       .then((response) => {
         console.log(response);
         // contract.finished = true;

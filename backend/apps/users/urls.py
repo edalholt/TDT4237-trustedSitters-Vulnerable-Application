@@ -12,5 +12,5 @@ router.register('api/login', views.LoginViewSet, basename='login')
 router.register('api/refresh', views.RefreshViewSet, basename='refresh')
 
 urlpatterns = [*router.urls,
-               path("api/verify-email/<uid>",
+               path("api/verify-email/<uid>/<status>",
                     views.VerificationView.as_view(), name="verify-email")]

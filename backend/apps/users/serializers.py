@@ -9,6 +9,7 @@ from django.core.mail import EmailMessage
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from django.conf import settings
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,9 +54,9 @@ class RegisterSerializer(UserSerializer):
         email_subject = "Activate your account"
         uid = user.pk
         domain = get_current_site(self.context["request"])
-        link = reverse('verify-email', kwargs={"uid": uid})
+        link = reverse('verify-email', kwargs={"uid": uid, "status": 1})
 
-        url = f"http://{domain}{link}"
+        url = f"{settings.PROTOCOL}://{domain}{link}"
 
         mail = EmailMessage(
             email_subject,
