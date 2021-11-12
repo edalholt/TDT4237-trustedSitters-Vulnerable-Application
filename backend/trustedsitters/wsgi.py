@@ -17,5 +17,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trustedsitters.settings')
 # Get wsgi application (standard approach)
 application = get_wsgi_application()
 
-# Use whitenoise to configure the static path
-application = WhiteNoise(application, root=settings.STATIC_ROOT)
+
+production = os.getenv('PRODUCTION', False)
+
+if production:
+    # Use whitenoise to configure the static path
+    application = WhiteNoise(application, root=settings.STATIC_ROOT)
+

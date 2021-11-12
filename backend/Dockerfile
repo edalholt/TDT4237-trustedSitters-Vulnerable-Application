@@ -4,6 +4,7 @@ FROM python:3.8.5-alpine
 # These two environment variables prevent __pycache__/ files.
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PRODUCTION=${PRODUCTION}
 
 # Enable bash
 RUN apk add --no-cache bash
