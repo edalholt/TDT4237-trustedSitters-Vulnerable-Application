@@ -30,7 +30,7 @@ After installing once, you only need to run the `python manage.py runserver` com
 To run the frontend server, run the following commands:
 
 - `cd frontend`
-- `npm install`
+- `npm ci`
 - `npm start`
 
 After installing once, you only need to run the `npm start` command to start the react server
