@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const SignupForm = ({ setUser }) => {
+const SignupForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -37,10 +37,13 @@ const SignupForm = ({ setUser }) => {
     AuthService.createUser(request)
       .then((response) => {
         console.log("User registered successfully");
+        setAppSnackbarText(
+          "If the email exist, an activation link has been sent."
+        );
+        setAppSnackbarOpen(true);
         setUsername("");
         setEmail("");
         setPassword("");
-        // TODO send verification email
       })
       .catch((err) => {
         let msg = "";
@@ -59,10 +62,7 @@ const SignupForm = ({ setUser }) => {
       <Container maxWidth='xs'>
         <form onSubmit={onSubmit}>
           <Stack spacing={2} padding={2}>
-            <img
-              alt='logo'
-              src='https://cdn.pixabay.com/photo/2014/08/15/22/27/house-insurance-419058_960_720.jpg'
-            />
+            <img alt='logo' src='/baby-stroller.png' />
             <TextField
               required
               label='Username'

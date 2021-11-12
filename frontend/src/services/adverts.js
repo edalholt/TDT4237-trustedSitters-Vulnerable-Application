@@ -5,6 +5,11 @@ const GetAllAdverts = () => {
   return request.then((response) => response.data);
 };
 
+const GetAdvert = (id) => {
+  const request = api.get(`/adverts/${id}/`);
+  return request.then((response) => response.data);
+};
+
 const GetNeedSitterAdverts = () => {
   const request = api.get("/adverts/needsitter/");
   return request.then((response) => response.data);
@@ -29,13 +34,20 @@ const EditAdvert = (id, data) => {
   const request = api.patch(`/adverts/${id}/`, data);
   return request.then((response) => response.data);
 };
+
+const DeleteAdvert = (id) => {
+  const request = api.delete(`/adverts/${id}/`);
+  return request.then((response) => response.data);
+};
 const AdvertsService = {
   GetAllAdverts,
+  GetAdvert,
   GetNeedSitterAdverts,
   GetIsSitterAdverts,
   CreateIsSitterAdvert,
   CreateNeedSitterAdvert,
   EditAdvert,
+  DeleteAdvert,
 };
 
 export default AdvertsService;

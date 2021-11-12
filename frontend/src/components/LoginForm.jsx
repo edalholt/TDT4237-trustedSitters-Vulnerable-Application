@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
 });
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -54,6 +54,8 @@ const LoginForm = ({ setUser }) => {
         setPassword("");
         setUser(response.user);
         history.push("/adverts");
+        setAppSnackbarText("Signed in successfully");
+        setAppSnackbarOpen(true);
       })
       .catch((err) => {
         console.log(err);
@@ -67,10 +69,7 @@ const LoginForm = ({ setUser }) => {
       <Container maxWidth='xs'>
         <form onSubmit={onSubmit}>
           <Stack spacing={2} padding={2}>
-            <img
-              alt='logo'
-              src='https://cdn.pixabay.com/photo/2014/08/15/22/27/house-insurance-419058_960_720.jpg'
-            />
+            <img alt='logo' src='/baby-stroller.png' />
             <TextField
               required
               label='Username'

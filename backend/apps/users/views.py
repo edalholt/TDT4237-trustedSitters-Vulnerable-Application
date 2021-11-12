@@ -1,11 +1,14 @@
 from django.contrib.auth import get_user_model
 from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer
-from rest_framework import viewsets, filters, status
+from rest_framework import viewsets, filters, status, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework.response import Response
+from django.shortcuts import redirect
+from django.contrib.sites.shortcuts import get_current_site
+import os
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -73,3 +76,24 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
             raise InvalidToken(e.args[0])
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+
+class VerificationView(generics.GenericAPIView):
+    def get(self, request, uid):
+        frontend_port = os.getenv("frontend_port", 3000)
+        domain = get_current_site(request).domain
+        verified_url = f"HTTP://{domain[:-4]}{frontend_port}/verified"
+        invalid_url = f"HTTP://{domain[:-4]}{frontend_port}/invalid"
+        try:
+            id = uid
+            user = get_user_model().objects.get(pk=id)
+
+            user.is_active = True
+            user.save()
+
+            return redirect(verified_url)
+
+        except Exception as ex:
+            pass
+
+        return redirect(invalid_url)

@@ -47,7 +47,8 @@ const EditAdvert = (props) => {
       if (type === "IS_SITTER") {
         AdvertsService.CreateIsSitterAdvert(request)
           .then((newAdvert) => {
-            // TODO: Popup snackbar with confirmation message
+            props.setSnackbarText("Advert created successfully");
+            props.setSnackbarOpen(true);
             props.setAdverts(props.adverts.concat(newAdvert));
             props.setOpen(false);
           })
@@ -55,7 +56,9 @@ const EditAdvert = (props) => {
       } else if (type === "ND_SITTER") {
         AdvertsService.CreateNeedSitterAdvert(request)
           .then((newAdvert) => {
-            // TODO: Popup snackbar with confirmation message
+            props.setSnackbarText("Advert created successfully");
+
+            props.setSnackbarOpen(true);
             props.setAdverts(props.adverts.concat(newAdvert));
             props.setOpen(false);
           })
@@ -64,10 +67,10 @@ const EditAdvert = (props) => {
         console.log(type);
       }
     } else if (props.action === "Edit") {
-      // TODO: Send Patch request
       AdvertsService.EditAdvert(props.advert.id, request)
         .then((editedAdvert) => {
-          // TODO: Popup snackbar with confirmation message
+          props.setSnackbarText("Advert edited successfully");
+          props.setSnackbarOpen(true);
           let ads = props.adverts.filter((ad) => ad.id !== props.advert.id);
           props.setAdverts(ads.concat(editedAdvert));
           props.setOpen(false);

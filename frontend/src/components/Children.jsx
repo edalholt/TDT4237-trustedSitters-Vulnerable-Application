@@ -44,7 +44,7 @@ const Children = ({ user }) => {
 
       <Grid container spacing={1.5} justifyContent='center'>
         {children
-          ?.filter((c) => c.parent === user.id)
+          ?.filter((c) => c.parent === user.username)
           .map((child) => (
             <Grid key={child.id} item xs={3}>
               <Child
@@ -72,7 +72,7 @@ const Children = ({ user }) => {
 
       <Grid container spacing={1.5} justifyContent='center'>
         {children
-          ?.filter((c) => c.guardians.includes(user.id))
+          ?.filter((c) => c.guardians.includes(user.username))
           .map((child) => (
             <Grid key={child.id} item xs={3}>
               <Child

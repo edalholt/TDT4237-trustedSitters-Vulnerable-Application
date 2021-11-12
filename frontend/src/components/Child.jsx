@@ -24,7 +24,7 @@ const Child = ({ child, user, children, setChildren }) => {
         </CardContent>
 
         <CardActions>
-          {user?.id === child.parent ? (
+          {user?.username === child.parent ? (
             <div>
               <IconButton size='small' onClick={handleOpen}>
                 <EditIcon />

@@ -9,11 +9,24 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 from datetime import timedelta
 import os.path
 
+
+# Get the GROUPID variable to accept connections from the application server and NGINX
+groupid = os.environ.get("GROUPID", "0")
+
+# Email configuration
+# The host must be running within NTNU's VPN (vpn.ntnu.no) to allow this config
+# Usage: https://docs.djangoproject.com/en/3.1/topics/email/#obtaining-an-instance-of-an-email-backend
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.stud.ntnu.no"
+EMAIL_USE_TLS = False
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = "tdt4237-group" + groupid + " " + "<noreply@idi.ntnu.no>"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -106,9 +119,6 @@ AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
