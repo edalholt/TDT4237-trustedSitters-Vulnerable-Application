@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from .validators import FileValidator
+import math
 # Create your models here.
 
 
@@ -31,6 +33,7 @@ class ChildFile(models.Model):
     child = models.ForeignKey(
         Child, on_delete=models.CASCADE, blank=False, related_name='children_files')
 
-    file = models.FileField(upload_to=child_directory_path, blank=False)
+    file = models.FileField(upload_to=child_directory_path,
+                            blank=False, validators=[FileValidator(allowed_mimetypes='', allowed_extensions='', max_size=math.inf)])
 
     content_type = models.CharField(max_length=64)

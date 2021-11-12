@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import Child
 
 
 class IsParentOrReadOnly(permissions.BasePermission):
@@ -14,3 +15,21 @@ class IsParentOrReadOnly(permissions.BasePermission):
             return True
 
         return obj.parent == request.user
+
+
+class ChildFilePermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method == "POST":
+            if request.data.get("child"):
+                child = Child.objects.get(pk=request.data["child"])
+
+                return child.parent == request.user
+            return False
+
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        if request.method == "DELETE":
+            return request.user == obj.child.parent
+        return request.user == obj.child.parent or request.user in obj.child.guardians.all()

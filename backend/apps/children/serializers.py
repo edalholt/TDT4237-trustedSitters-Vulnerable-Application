@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Child
+from .models import Child, ChildFile
 
 
 class ChildSerializer(serializers.ModelSerializer):
@@ -14,3 +14,17 @@ class ChildSerializer(serializers.ModelSerializer):
         model = Child
         fields = ('id', 'parent', 'name', 'info', 'guardians')
         read_only_fields = ['parent']
+
+
+class ChildFilePostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ChildFile
+        fields = ('id', 'child', 'file')
+
+
+class ChildFileGetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ChildFile
+        fields = ('id', 'child')
