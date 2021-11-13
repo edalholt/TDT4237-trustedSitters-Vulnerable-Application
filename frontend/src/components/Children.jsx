@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal";
 
 const Children = ({ user }) => {
   const [children, setChildren] = useState(null);
+  const [childFiles, setChildFiles] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -23,6 +24,7 @@ const Children = ({ user }) => {
   };
   useEffect(() => {
     console.log("effect");
+    ChildrenService.GetChildFileInfos().then((c) => setChildFiles(c));
     ChildrenService.GetChildren().then((c) => setChildren(c));
   }, []);
 
@@ -48,6 +50,7 @@ const Children = ({ user }) => {
           .map((child) => (
             <Grid key={child.id} item xs={3}>
               <Child
+                files={childFiles}
                 children={children}
                 setChildren={setChildren}
                 user={user}
@@ -76,6 +79,7 @@ const Children = ({ user }) => {
           .map((child) => (
             <Grid key={child.id} item xs={3}>
               <Child
+                files={childFiles}
                 children={children}
                 setChildren={setChildren}
                 user={user}
