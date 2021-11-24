@@ -5,6 +5,11 @@ const GetAllAdverts = () => {
   return request.then((response) => response.data);
 };
 
+const GetAllAdvertsOrderBy = (order_by) => {
+  const request = api.get(`/adverts/?order_by=${order_by}`);
+  return request.then((response) => response.data);
+};
+
 const GetAdvert = (id) => {
   const request = api.get(`/adverts/${id}/`);
   return request.then((response) => response.data);
@@ -48,6 +53,7 @@ const AdvertsService = {
   CreateNeedSitterAdvert,
   EditAdvert,
   DeleteAdvert,
+  GetAllAdvertsOrderBy,
 };
 
 export default AdvertsService;
