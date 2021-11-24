@@ -11,6 +11,8 @@ import EditAdvert from "./EditAdvert";
 import Modal from "@mui/material/Modal";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -37,6 +39,19 @@ const Adverts = ({ user }) => {
     bottom: 20,
     right: 20,
   };
+
+  // Options for ordering adverts
+  const optionsDictionary = {
+    'Advert type': 'advertType',
+    'Date created': 'date',
+    'Start time': 'start_time',
+    'End time': 'end_time'
+  }
+  // Retrieve adverts with specific ordering
+  const handleOrderBy = (e) => {
+    AdvertsService.GetAllAdvertsOrderBy(optionsDictionary[e.value]).then((ads) => setAdverts(ads))
+  }
+
   useEffect(() => {
     console.log("effect");
     AdvertsService.GetAllAdverts().then((ads) => setAdverts(ads));
@@ -47,6 +62,7 @@ const Adverts = ({ user }) => {
       <Typography sx={{ textAlign: "center" }} variant='h2'>
         Adverts
       </Typography>
+
       <Fab
         sx={fabStyle}
         variant='extended'
@@ -57,6 +73,8 @@ const Adverts = ({ user }) => {
         <AddIcon sx={{ mr: 1 }} />
         Create new advert
       </Fab>
+
+      <Dropdown options={Object.keys(optionsDictionary)} onChange={handleOrderBy} placeholder="Order by..." />
 
       <Grid container spacing={1.5} justifyContent='center'>
         {adverts?.map((advert) => (
