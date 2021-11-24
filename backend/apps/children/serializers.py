@@ -1,6 +1,8 @@
 from rest_framework import serializers
-
-from .models import Child
+from django.urls import reverse
+from .models import Child, ChildFile
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 
 
 class ChildSerializer(serializers.ModelSerializer):
@@ -14,3 +16,30 @@ class ChildSerializer(serializers.ModelSerializer):
         model = Child
         fields = ('id', 'parent', 'name', 'info', 'guardians')
         read_only_fields = ['parent']
+
+
+class ChildFilePostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ChildFile
+        fields = ('id', 'child', 'file')
+
+
+class ChildFileGetSerializer(serializers.ModelSerializer):
+    link = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChildFile
+        fields = ('id', 'child', 'link', 'name')
+
+    def get_link(self, obj):
+        domain = get_current_site(self.context["request"])
+        link = reverse('child-file-download', kwargs={"pk": obj.id})
+
+        link = f"{settings.PROTOCOL}://{domain}{link}"
+        return link
+
+    def get_name(self, obj):
+        # name is stored as children/id/filename, so splitting and selecting last item gets only the filename.
+        return obj.file.name.split('/')[-1]

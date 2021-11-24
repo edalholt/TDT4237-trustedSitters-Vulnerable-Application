@@ -13,6 +13,8 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
+import ChildrenService from "../services/children";
+import { Stack } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -25,7 +27,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const Child = ({ child, user, children, setChildren }) => {
+const Child = ({ child, user, children, setChildren, files }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -34,6 +36,27 @@ const Child = ({ child, user, children, setChildren }) => {
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const uploadFile = (e) => {
+    e.preventDefault();
+
+    let formData = new FormData();
+
+    formData.append("file", selectedFile);
+    formData.append("child", child.id);
+    ChildrenService.UploadChildFile(formData)
+      .then((response) => console.log(response))
+      .catch((error) => console.error(error));
+  };
+
+  const downloadFile = (url) => {
+    ChildrenService.DownloadChildFile(url)
+      .then((response) => {
+        const file = new File([response], url, { type: response.type });
+        window.open(URL.createObjectURL(file));
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -68,22 +91,33 @@ const Child = ({ child, user, children, setChildren }) => {
         </CardActions>
         <Collapse in={expanded} timeout='auto' unmountOnExit>
           <CardContent>
-            <Link component='button' underline='hover'>
-              Dummy file link
-            </Link>
-            <Link component='button' underline='hover'>
-              Dummy file link
-              <IconButton size='small'>
-                <DeleteIcon />
-              </IconButton>
-            </Link>
+            {files
+              ?.filter((file) => file.child === child.id)
+              .map((file) => (
+                <Stack spacing={2} direction='row' justifyContent='right'>
+                  <Button
+                    key={file.id}
+                    component='button'
+                    onClick={() => downloadFile(file.link)}
+                    underline='hover'
+                  >
+                    {file.name}
+                  </Button>
+                  {user.username === child.parent ? (
+                    <IconButton size='small'>
+                      <DeleteIcon />
+                    </IconButton>
+                  ) : null}
+                </Stack>
+              ))}
+
             <input
               type='file'
               onChange={(e) => setSelectedFile(e.target.files[0])}
             ></input>
           </CardContent>
           <CardActions>
-            <Button>Upload file</Button>
+            <Button onClick={uploadFile}>Upload file</Button>
           </CardActions>
         </Collapse>
       </Card>
