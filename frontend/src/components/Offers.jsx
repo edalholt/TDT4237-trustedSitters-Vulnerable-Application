@@ -67,6 +67,9 @@ const Offers = ({ user }) => {
   return (
     <Container>
       <Stack spacing={2} margin={5} justifyContent='center'>
+        <Typography sx={{ textAlign: "center" }} variant='body'>
+          *short description of the Offers page*
+        </Typography>
         <ToggleButtonGroup
           sx={{ justifyContent: "center" }}
           value={offerType}
@@ -82,7 +85,6 @@ const Offers = ({ user }) => {
           </ToggleButton>
         </ToggleButtonGroup>
         <FormControl component='fieldset'>
-          {/* <FormLabel component='legend'>Label placement</FormLabel> */}
           <FormGroup
             aria-label='position'
             sx={{ justifyContent: "center" }}

@@ -82,7 +82,7 @@ const Advert = ({
         </CardContent>
 
         <CardActions>
-          {user?.id === advert.owner ? (
+          {user?.username === advert.owner ? (
             <div>
               <IconButton size='small' onClick={handleOpen}>
                 <EditIcon />

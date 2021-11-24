@@ -56,7 +56,7 @@ ALLOWED_HOSTS = [
     'localhost',
     # Hosts for production
     'molde.idi.ntnu.no',
-    ]
+]
 
 CORS_ALLOWED_ORIGINS = [
     # Allow requests from node app in development
@@ -174,9 +174,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
+
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )

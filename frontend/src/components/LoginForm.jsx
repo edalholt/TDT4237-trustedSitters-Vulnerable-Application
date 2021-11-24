@@ -8,6 +8,11 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Link from "@mui/material/Link";
 import { useHistory } from "react-router-dom";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -21,11 +26,44 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const [passwordErrorText, setPasswordErrorText] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [resetUser, setResetUser] = useState("");
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleResetClose = () => {
+    setOpen(false);
+  };
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setSnackbarOpen(false);
+  };
+
+  const onForgotPassword = (e) => {
+    e.preventDefault();
+
+    const request = { username: resetUser, email: email };
+
+    AuthService.forgotPassword(request)
+      .then((response) => {
+        setOpen(false);
+
+        console.log("Forgot password request sent");
+        setResetUser("");
+        setEmail("");
+        setAppSnackbarText("If the user exist, a reset link has been sent.");
+        setAppSnackbarOpen(true);
+      })
+      .catch((err) => {
+        console.log("Forgot password request failed");
+      });
   };
 
   const onSubmit = async (e) => {
@@ -98,6 +136,14 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
             >
               Not registered? Click here to sign up!
             </Link>
+
+            <Link
+              component='button'
+              underline='hover'
+              onClick={handleClickOpen}
+            >
+              Forgot Password?
+            </Link>
           </Stack>
         </form>
         <Snackbar
@@ -110,6 +156,45 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
             Login Failed! Please check you credentials.
           </Alert>
         </Snackbar>
+
+        <Dialog open={open} onClose={handleResetClose}>
+          <form onSubmit={onForgotPassword}>
+            <DialogTitle>Forgot Password?</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                To receive a password reset link, please enter your email and
+                username.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin='dense'
+                id='name'
+                label='Email Address'
+                type='email'
+                onInput={(e) => setEmail(e.target.value)}
+                value={email}
+                fullWidth
+                variant='standard'
+                required
+              />
+              <TextField
+                autoFocus
+                required
+                margin='dense'
+                id='name'
+                onInput={(e) => setResetUser(e.target.value)}
+                value={resetUser}
+                label='Username'
+                fullWidth
+                variant='standard'
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleResetClose}>Cancel</Button>
+              <Button type='submit'>Submit</Button>
+            </DialogActions>
+          </form>
+        </Dialog>
       </Container>
     </>
   );

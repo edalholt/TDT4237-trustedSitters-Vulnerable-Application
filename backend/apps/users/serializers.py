@@ -10,6 +10,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.conf import settings
+from django.utils.encoding import force_bytes, force_text
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -86,3 +88,55 @@ class RegisterSerializer(UserSerializer):
             raise serializers.ValidationError(errors)
 
         return super(RegisterSerializer, self).validate(data)
+
+
+class ResetPasswordSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ['email', "username"]
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        style={"input_type": "password"}, write_only=True)
+    password1 = serializers.CharField(
+        style={"input_type": "password"}, write_only=True)
+    token = serializers.CharField(
+        min_length=1, write_only=True)
+    uid = serializers.CharField(
+        min_length=1, write_only=True)
+
+    class Meta:
+        fields = ['password', 'password1', 'token', 'uid']
+
+    def validate(self, attrs):
+        password = attrs.get('password')
+        password1 = attrs.get('password1')
+        token = attrs.get('token')
+        uid = attrs.get('uid')
+
+        id = force_text(urlsafe_base64_decode(uid))
+        user = get_user_model().objects.get(id=id)
+        username = force_text(urlsafe_base64_decode(token))
+        errorMessage = dict()
+        if not username == user.username:
+
+            errorMessage['message'] = 'The reset link is invalid'
+            raise serializers.ValidationError(errorMessage)
+
+        try:
+            validate_password(password)
+        except exceptions.ValidationError as error:
+            errorMessage['message'] = list(error.messages)
+
+        if errorMessage:
+            raise serializers.ValidationError(errorMessage)
+
+        if password != password1:
+            raise serializers.ValidationError("Passwords must match!")
+
+        user.set_password(password)
+        user.save()
+
+        return user
