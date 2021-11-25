@@ -129,7 +129,7 @@ class MFAView(views.APIView):
         '''
         user = User.objects.get(id = request.user.id)
         secret_key = user.mfa_token
-        mfa_token = pyotp.TOTP(secret_key)#.provisioning_uri(name=request.user.email, issuer_name='TrustedSitters')
+        mfa_token = pyotp.TOTP(secret_key)
         if mfa_token.verify(request.data['otp']):
             user.mfa_active=True
             user.save()
