@@ -40,11 +40,7 @@ const getMFAToken = () => {
 }
 
 const postMFAToken = (otp) => {
-  return api.post('/mfa/', {'otp': otp}).then(()=>{
-    return true
-  }).catch((error)=>{
-    return false
-  })
+  return api.post('/mfa/', {'otp': otp})
 }
 
 const AuthService = { createUser, login, logout, getCurrentUser, getMFAToken, postMFAToken };

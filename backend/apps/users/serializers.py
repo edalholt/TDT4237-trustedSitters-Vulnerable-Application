@@ -31,7 +31,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         data['user'] = UserSerializer(self.user).data
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['mfa_active'] = User.objects.get(username = self.user).mfa_active
+        data['mfa_verified'] = User.objects.get(username = self.user).mfa_active
 
         if api_settings.UPDATE_LAST_LOGIN:
             update_last_login(None, self.user)

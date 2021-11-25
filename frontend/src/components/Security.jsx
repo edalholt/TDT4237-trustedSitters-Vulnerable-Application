@@ -10,34 +10,31 @@ import TextField from "@mui/material/TextField";
 const Security = ({user}) => {
     const [mfa_token, setHash] = useState('');
     const [otp, setOtp] = useState('');
-    const [active, setActive] = useState(false);
-    const [failed, setFailed] = useState(false);
+    const [verified, setVerified] = useState(false);
+    const [OTPErrorText, setOTPErrorText] = useState("");
 
 
     const enableMFA = () => {
-        console.log('click')
-        console.log(user)
         AuthService.getMFAToken().then((data) => {
             setHash(data['mfa_token'])
-            setActive(data['active'])
+            setVerified(data['verified'])
         })
     }
 
     const onSubmit = (e) => {
         e.preventDefault()
-        setFailed(false)
-        AuthService.postMFAToken(otp).then((active)=>{
-            setActive(active)
-            if(!active){
-                setFailed(true)
-            } else setFailed(false)
-        })
+        AuthService.postMFAToken(otp).then((verified)=>{
+            setVerified(verified)
+        }).catch((err) => {
+            console.log(err);
+            setOTPErrorText('Wrong one-time-password')
+        });
     }
 
     useEffect(() => {
         //Runs on the first render
         //And any time any dependency value changes
-      }, [mfa_token, active, failed]);
+      }, [mfa_token, verified]);
 
     return (
         <Container>
@@ -50,7 +47,7 @@ const Security = ({user}) => {
             <Typography>
                 Email: {user?.email}
             </Typography>
-            {!active && !mfa_token ? 
+            {!verified && !mfa_token ? 
                 <Typography>
                 <Button variant='contained' color='secondary' onClick={enableMFA}>
                     SHOW MFA
@@ -63,7 +60,7 @@ const Security = ({user}) => {
                     <QRCode value={mfa_token}/>
                 </Container>
             : null}
-            {!active && mfa_token ?
+            {!verified && mfa_token ?
             <Container>
                 <Typography>
                     Verify one-time-password:
@@ -71,20 +68,17 @@ const Security = ({user}) => {
                 <form onSubmit={onSubmit}>
                     <TextField
                         onInput={(e) => setOtp(e.target.value)}
+                        label='One-time-password'
+                        error={!!OTPErrorText}
+                        helperText={OTPErrorText}
                     />
                 </form>       
             </Container>
             : null
             }
-            {active ? 
+            {verified ? 
                 <Typography>
                     MFA has been activated on this account
-                </Typography>
-                : null
-            }
-            {failed ? 
-                <Typography>
-                    Wrong one-time-password, please try again.
                 </Typography>
                 : null
             }
