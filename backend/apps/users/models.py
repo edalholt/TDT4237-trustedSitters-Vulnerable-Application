@@ -8,4 +8,4 @@ from encrypted_model_fields.fields import EncryptedCharField
 
 class User(AbstractUser):
     mfa_token = EncryptedCharField(max_length = 50, null=True, blank=True)
-    mfa_active = models.BooleanField(default=False)
+    mfa_active = models.BooleanField(default=False, blank=True)
