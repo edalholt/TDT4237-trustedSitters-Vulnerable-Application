@@ -9,6 +9,7 @@ ENV GROUP_ID=${GROUP_ID}
 ENV PORT_PREFIX=${PORT_PREFIX}
 ENV DOMAIN=${DOMAIN}
 ENV PROTOCOL=${PROTOCOL}
+ENV FIELD_ENCRYPTION_KEY=FIELD_ENCRYPTION_KEY
 
 # Enable bash
 RUN apk add --no-cache bash
@@ -16,7 +17,7 @@ RUN apk add --no-cache bash
 # Install psycopg2 dependencies
 RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
-    && apk add postgresql-dev gcc python3-dev musl-dev \
+    && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev \
     && apk del build-deps \
     && apk --no-cache add musl-dev linux-headers g++
 

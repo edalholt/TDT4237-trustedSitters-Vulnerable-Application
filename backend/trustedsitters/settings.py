@@ -47,6 +47,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t'
+FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', 'yXhjluyPu6bYlul9wyAaHW2CT25ky9W7TKC7h8y166E=')
 
 DEBUG = True
 
@@ -80,6 +81,7 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.children.apps.ChildrenConfig',
     'apps.offers.apps.OffersConfig',
+    'encrypted_model_fields',
 ]
 
 MIDDLEWARE = [

@@ -33,6 +33,16 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 
-const Authservice = { createUser, login, logout, getCurrentUser };
+const getMFAToken = () => {
+  return api.get('/mfa/').then((response)=>{
+    return {'mfa_token': response.data.mfa_token, 'active': response.data.active}
+  })
+}
 
-export default Authservice;
+const postMFAToken = (otp) => {
+  return api.post('/mfa/', {'otp': otp})
+}
+
+const AuthService = { createUser, login, logout, getCurrentUser, getMFAToken, postMFAToken };
+
+export default AuthService;

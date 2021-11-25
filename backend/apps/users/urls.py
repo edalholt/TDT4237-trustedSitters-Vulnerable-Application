@@ -11,6 +11,9 @@ router.register('api/register', views.RegistrationViewSet, basename='register')
 router.register('api/login', views.LoginViewSet, basename='login')
 router.register('api/refresh', views.RefreshViewSet, basename='refresh')
 
-urlpatterns = [*router.urls,
-               path("api/verify-email/<uid>/<status>",
-                    views.VerificationView.as_view(), name="verify-email")]
+
+urlpatterns = [
+     *router.urls,
+     path("api/verify-email/<uid>/<status>", views.VerificationView.as_view(), name="verify-email"),
+     path('api/mfa/', views.MFAView.as_view(), name='mfa')
+]
