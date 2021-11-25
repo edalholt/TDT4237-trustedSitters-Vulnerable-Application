@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
-import Authservice from "../services/auth";
+import AuthService from "../services/auth";
 import React, { useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import TextField from "@mui/material/TextField";
@@ -17,7 +17,7 @@ const Security = ({user}) => {
     const enableMFA = () => {
         console.log('click')
         console.log(user)
-        Authservice.getMFAToken().then((data) => {
+        AuthService.getMFAToken().then((data) => {
             setHash(data['mfa_token'])
             setActive(data['active'])
         })
@@ -26,7 +26,7 @@ const Security = ({user}) => {
     const onSubmit = (e) => {
         e.preventDefault()
         setFailed(false)
-        Authservice.postMFAToken(otp).then((active)=>{
+        AuthService.postMFAToken(otp).then((active)=>{
             setActive(active)
             if(!active){
                 setFailed(true)

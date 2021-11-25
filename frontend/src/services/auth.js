@@ -47,6 +47,6 @@ const postMFAToken = (otp) => {
   })
 }
 
-const Authservice = { createUser, login, logout, getCurrentUser, getMFAToken, postMFAToken };
+const AuthService = { createUser, login, logout, getCurrentUser, getMFAToken, postMFAToken };
 
-export default Authservice;
+export default AuthService;
