@@ -82,7 +82,6 @@ INSTALLED_APPS = [
     'apps.children.apps.ChildrenConfig',
     'apps.offers.apps.OffersConfig',
     'encrypted_model_fields',
-    'django_pyc',
 ]
 
 MIDDLEWARE = [
