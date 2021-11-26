@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework import permissions, viewsets, filters, status, generics, views
+from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -12,7 +12,11 @@ import os
 from django.conf import settings
 import pyotp
 from .models import User
-from django.core.signing import Signer
+from django.core.mail import EmailMessage
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_text
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -137,3 +141,59 @@ class MFAView(views.APIView):
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+class PasswordResetEmailView(generics.GenericAPIView):
+    serializer_class = ResetPasswordSerializer
+
+    def post(self, request):
+        if request.data.get("email") and request.data.get("username"):
+            email = request.data["email"]
+            username = request.data["username"]
+
+            if get_user_model().objects.filter(email=email, username=username).exists():
+                user = get_user_model().objects.get(email=email, username=username)
+
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                domain = get_current_site(request).domain
+                token = urlsafe_base64_encode(force_bytes(user.username))
+                link = reverse(
+                    'password-reset', kwargs={"uidb64": uid, "token": token})
+
+                url = f"{settings.PROTOCOL}://{domain}{link}"
+                email_subject = "Password reset"
+                mail = EmailMessage(
+                    email_subject,
+                    url,
+                    None,
+                    [email],
+                )
+                mail.send(fail_silently=False)
+        return Response({'success': "If the user exists, you will shortly receive a link to reset your password."}, status=status.HTTP_200_OK)
+
+
+class ResetPasswordView(generics.GenericAPIView):
+    def get(self, request, uidb64, token):
+        domain = get_current_site(request).domain
+        new_password_url = settings.URL + "/new_password"
+        invalid_url = settings.URL + "/invalid"
+        try:
+            id = force_text(urlsafe_base64_decode(uidb64))
+            user = get_user_model().objects.get(pk=id)
+            username = force_text(urlsafe_base64_decode(token))
+            if not username == user.username:  # Verify that the token is valid for the user
+                return redirect(invalid_url)
+
+            return redirect(f'{new_password_url}?uid={uidb64}&token={token}')
+
+        except Exception as ex:
+            pass
+
+        return redirect(invalid_url)
+
+
+class SetNewPasswordView(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)

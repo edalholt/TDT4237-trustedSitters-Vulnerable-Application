@@ -33,6 +33,9 @@ const Children = ({ user }) => {
       <Typography sx={{ textAlign: "center" }} variant='h3'>
         My Children
       </Typography>
+      <Typography sx={{ textAlign: "center" }} variant='body'>
+        *short description of the Children page*
+      </Typography>
       <Fab
         sx={fabStyle}
         variant='extended'

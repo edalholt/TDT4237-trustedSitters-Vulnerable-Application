@@ -17,6 +17,9 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Contracts from "./components/Contracts";
 import Security from "./components/Security";
+import Home from "./components/Home";
+import Avatar from "@mui/material/Avatar";
+import ResetPassword from "./components/ResetPassword";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -54,6 +57,11 @@ const App = () => {
       <AppBar position='static'>
         <Toolbar>
           <Grid container>
+            <Grid item>
+              <Button size='small' component={Link} to='/'>
+                <Avatar alt='Home' src='favicon.ico' />
+              </Button>
+            </Grid>
             {user ? (
               <Grid item>
                 <Button color='inherit' component={Link} to='/adverts'>
@@ -135,6 +143,9 @@ const App = () => {
           <Route path='/invalid'>
             <Invalid />
           </Route>
+          <Route path='/new_password'>
+            <ResetPassword />
+          </Route>
           <Route path='/contracts'>
             <Contracts user={user} />
           </Route>
@@ -144,6 +155,9 @@ const App = () => {
             />
           </Route>
           <Route path='/'>{/* <Home /> */}</Route>
+          <Route path='/'>
+            <Home />
+          </Route>
         </Switch>
         <Snackbar
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}

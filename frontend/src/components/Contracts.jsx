@@ -18,6 +18,9 @@ const Contracts = ({ user }) => {
       <Typography sx={{ textAlign: "center" }} variant='h2'>
         Contracts
       </Typography>
+      <Typography sx={{ textAlign: "center" }} variant='body'>
+        *short description of the Contracts page*
+      </Typography>
       <Typography sx={{ textAlign: "center" }} variant='h5'>
         Active Contracts
       </Typography>

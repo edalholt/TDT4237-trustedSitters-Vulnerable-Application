@@ -25,6 +25,18 @@ const login = (credentials) => {
   });
 };
 
+const forgotPassword = (credentials) => {
+  const request = api.post("/request-reset-password/", credentials);
+
+  return request.then((response) => response.data);
+};
+
+const newPassword = (data) => {
+  const request = api.post(`/reset-password-validate/`, data);
+
+  return request.then((response) => response.data);
+};
+
 const logout = () => {
   TokenService.removeUser();
 };
@@ -43,6 +55,15 @@ const postMFAToken = (otp) => {
   return api.post('/mfa/', {'otp': otp})
 }
 
-const AuthService = { createUser, login, logout, getCurrentUser, getMFAToken, postMFAToken };
+const AuthService = {
+  createUser,
+  login,
+  logout,
+  getCurrentUser,
+  forgotPassword,
+  newPassword,
+  getMFAToken,
+  postMFAToken,
+};
 
 export default AuthService;
