@@ -30,10 +30,7 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const [OTP, setOTP] = useState('');
   const [id, setId] = useState('')
   const [email, setEmail] = useState('')
-
-  const [email, setEmail] = useState("");
   const [resetUser, setResetUser] = useState("");
-
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
