@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, viewsets, filters, status, generics, views
-from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
+from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer, ResetPasswordSerializer, SetNewPasswordSerializer, MFASerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -109,8 +109,9 @@ class VerificationView(generics.GenericAPIView):
         return redirect(invalid_url)
 
 
-class MFAView(views.APIView):
+class MFAView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MFASerializer
 
     def get(self, request):
         '''
@@ -131,15 +132,25 @@ class MFAView(views.APIView):
         '''
             Verifies the provided one-time-password and sets the mfa_active User field to True
         '''
+
+        serializer = self.serializer_class(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
         user = User.objects.get(id = request.user.id)
-        secret_key = user.mfa_token
-        mfa_token = pyotp.TOTP(secret_key)
-        if mfa_token.verify(request.data['otp']):
+        if user.mfa_token is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        mfa_token = pyotp.TOTP(user.mfa_token)
+        if not user.mfa_active and mfa_token.verify(serializer.validated_data):
             user.mfa_active=True
             user.save()
             return Response(status=status.HTTP_201_CREATED)
+        elif mfa_token.verify(serializer.validated_data):
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 
 class PasswordResetEmailView(generics.GenericAPIView):
     serializer_class = ResetPasswordSerializer

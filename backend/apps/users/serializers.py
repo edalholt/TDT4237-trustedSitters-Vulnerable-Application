@@ -92,6 +92,23 @@ class RegisterSerializer(UserSerializer):
         return super(RegisterSerializer, self).validate(data)
 
 
+class MFASerializer(serializers.Serializer):
+    '''
+        Validate the one-time-password which must be six digits.
+    '''
+
+    otp = serializers.CharField(
+        min_length=6, max_length=6, write_only=True)
+
+    def validate(self, data):
+        otp=data.get('otp')
+
+        if not otp.isdigit():
+            raise serializers.ValidationError('The one-time-password must be a number with six digits.')
+
+        return otp
+
+
 class ResetPasswordSerializer(serializers.ModelSerializer):
 
     class Meta:
