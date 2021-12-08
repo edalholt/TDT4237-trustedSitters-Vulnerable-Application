@@ -154,7 +154,6 @@ const App = () => {
               user={user}
             />
           </Route>
-          <Route path='/'>{/* <Home /> */}</Route>
           <Route path='/'>
             <Home />
           </Route>
