@@ -15,6 +15,11 @@ const EditChild = (id, data) => {
   return request.then((response) => response.data);
 };
 
+const DeleteChild = (id, data) => {
+  const request = api.delete(`/children/${id}/`, data);
+  return request.then((response) => response.data);
+};
+
 const UploadChildFile = (data) => {
   const request = api.post("/child-file/", data, {
     headers: {
@@ -48,6 +53,7 @@ const ChildrenService = {
   GetChildren,
   CreateChild,
   EditChild,
+  DeleteChild,
   UploadChildFile,
   GetChildFileInfos,
   DownloadChildFile,

@@ -15,6 +15,11 @@ import { styled } from "@mui/material/styles";
 import ChildrenService from "../services/children";
 import { Stack } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -36,8 +41,21 @@ const Child = ({ child, user, children, setChildren, files }) => {
 
   const [childFiles, setChildFiles] = useState(files);
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const handleConfirmOpen = () => setConfirmOpen(true);
+  const handleConfirmClose = () => setConfirmOpen(false);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const deleteChild = (e) => {
+    e.preventDefault();
+
+    ChildrenService.DeleteChild(child.id).then((response) => {
+      console.log("Child entry deleted");
+      ChildrenService.GetChildren().then((c) => setChildren(c)); // Reload data from backend
+    });
   };
 
   const uploadFile = (e) => {
@@ -77,7 +95,6 @@ const Child = ({ child, user, children, setChildren, files }) => {
     ChildrenService.RemoveGuardian({ child: childId, guardian: guardian })
       .then((response) => {
         console.log("Removed Guardian");
-        // setGuardians(guardians.filter((g) => g !== guardian));
         ChildrenService.GetChildren().then((c) => setChildren(c));
       })
       .catch((err) => console.log(err));
@@ -99,7 +116,7 @@ const Child = ({ child, user, children, setChildren, files }) => {
               <IconButton size='small' onClick={handleOpen}>
                 <EditIcon />
               </IconButton>
-              <IconButton size='small'>
+              <IconButton size='small' onClick={handleConfirmOpen}>
                 <DeleteIcon />
               </IconButton>
             </div>
@@ -198,6 +215,26 @@ const Child = ({ child, user, children, setChildren, files }) => {
           setOpen={setOpen}
         ></EditChild>
       </Modal>
+      <Dialog
+        open={confirmOpen}
+        onClose={handleConfirmClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{"Delete advert?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete this child entry? This cannot be
+            undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmClose}>No</Button>
+          <Button onClick={deleteChild} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
