@@ -43,9 +43,6 @@ DEFAULT_FROM_EMAIL = "tdt4237-group" + GROUP_ID + " " + "<noreply@idi.ntnu.no>"
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
 SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t'
 
 DEBUG = True

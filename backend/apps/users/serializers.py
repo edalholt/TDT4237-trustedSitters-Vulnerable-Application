@@ -50,7 +50,6 @@ class RegisterSerializer(UserSerializer):
     def create(self, validated_data):
         user = get_user_model().objects.create_user(**validated_data)
         user.is_active = False
-        print(user.username, user.is_active)
         user.save()
         email = validated_data["email"]
         email_subject = "Activate your account"
