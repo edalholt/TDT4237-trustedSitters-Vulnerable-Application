@@ -16,6 +16,7 @@ import Invalid from "./components/Invalid";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Contracts from "./components/Contracts";
+import Security from "./components/Security";
 import Home from "./components/Home";
 import Avatar from "@mui/material/Avatar";
 import ResetPassword from "./components/ResetPassword";
@@ -74,6 +75,9 @@ const App = () => {
                 </Button>
                 <Button color='inherit' component={Link} to='/contracts'>
                   contracts
+                </Button>
+                <Button color='inherit' component={Link} to='/security'>
+                  security
                 </Button>
               </Grid>
             ) : null}
@@ -144,6 +148,11 @@ const App = () => {
           </Route>
           <Route path='/contracts'>
             <Contracts user={user} />
+          </Route>
+          <Route path='/security'>
+            <Security 
+              user={user}
+            />
           </Route>
           <Route path='/'>
             <Home />

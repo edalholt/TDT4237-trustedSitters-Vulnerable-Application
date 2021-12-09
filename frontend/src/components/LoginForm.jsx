@@ -24,11 +24,13 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
   const [password, setPassword] = useState("");
   const [usernameErrorText, setUsernameErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
+  const [OTPErrorText, setOTPErrorText] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  const [email, setEmail] = useState("");
+  const [verified, setVerified] = useState(false);
+  const [OTP, setOTP] = useState('');
+  const [id, setId] = useState('')
+  const [email, setEmail] = useState('')
   const [resetUser, setResetUser] = useState("");
-
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -87,13 +89,20 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
 
     AuthService.login(request)
       .then((response) => {
-        console.log("Signed in successfully");
-        setUsername("");
-        setPassword("");
-        setUser(response.user);
-        history.push("/adverts");
-        setAppSnackbarText("Signed in successfully");
-        setAppSnackbarOpen(true);
+        if(response.mfa_verified){
+          setVerified(true)
+          setEmail(response.user['email'])
+          setId(response.user['id'])
+        }
+        else {
+          console.log("Signed in successfully");
+          setUsername("");
+          setPassword("");
+          setUser(response.user);
+          history.push("/adverts");
+          setAppSnackbarText("Signed in successfully");
+          setAppSnackbarOpen(true);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -102,50 +111,90 @@ const LoginForm = ({ setUser, setAppSnackbarOpen, setAppSnackbarText }) => {
         setPasswordErrorText("Wrong username or password");
       });
   };
+
+  const onSubmitOTP = (e) => {
+    e.preventDefault()
+    AuthService.postMFAToken(OTP).then((verified)=>{
+      setUser({
+        id: id,
+        username: username,
+        email: email
+      })
+      console.log("Signed in successfully");
+      setUsername("");
+      setPassword("");
+      history.push("/adverts");
+      setAppSnackbarText("Signed in successfully");
+      setAppSnackbarOpen(true);
+      }).catch((err) => {
+        console.log(err);
+        setOTPErrorText('Wrong one-time-password')
+      });
+  }
   return (
     <>
       <Container maxWidth='xs'>
-        <form onSubmit={onSubmit}>
-          <Stack spacing={2} padding={2}>
-            <img alt='logo' src='/baby-stroller.png' />
+        <Stack spacing={2} padding={2}>
+        <img alt='logo' src='/baby-stroller.png' />
+        </Stack>
+        {verified ?
+          <form onSubmit={onSubmitOTP}>
+            <Stack spacing={2} padding={2}>
             <TextField
-              required
-              label='Username'
-              onInput={(e) => setUsername(e.target.value)}
-              value={username}
-              error={!!usernameErrorText}
-              helperText={usernameErrorText}
+              onInput={(e) => setOTP(e.target.value)}
+              label='One-time-password'
+              value={OTP}
+              error={!!OTPErrorText}
+              helperText={OTPErrorText}
             />
-
-            <TextField
-              required
-              label='Password'
-              type='password'
-              onInput={(e) => setPassword(e.target.value)}
-              value={password}
-              error={!!passwordErrorText}
-              helperText={passwordErrorText}
-            ></TextField>
             <Button variant='contained' type='submit'>
-              Sign In
+              Authenticate
             </Button>
-            <Link
-              component='button'
-              underline='hover'
-              onClick={() => history.push("/signup")}
-            >
-              Not registered? Click here to sign up!
-            </Link>
+            </Stack>
+          </form>  
+          :
+          <form onSubmit={onSubmit}>
+            <Stack spacing={2} padding={2}>
 
-            <Link
-              component='button'
-              underline='hover'
-              onClick={handleClickOpen}
-            >
-              Forgot Password?
-            </Link>
-          </Stack>
-        </form>
+              <TextField
+                required
+                label='Username'
+                onInput={(e) => setUsername(e.target.value)}
+                value={username}
+                error={!!usernameErrorText}
+                helperText={usernameErrorText}
+              />
+
+              <TextField
+                required
+                label='Password'
+                type='password'
+                onInput={(e) => setPassword(e.target.value)}
+                value={password}
+                error={!!passwordErrorText}
+                helperText={passwordErrorText}
+              ></TextField>
+              <Button variant='contained' type='submit'>
+                Sign In
+              </Button>
+              <Link
+                component='button'
+                underline='hover'
+                onClick={() => history.push("/signup")}
+              >
+                Not registered? Click here to sign up!
+              </Link>
+
+              <Link
+                component='button'
+                underline='hover'
+                onClick={handleClickOpen}
+              >
+                Forgot Password?
+              </Link>
+            </Stack>
+          </form>
+        }
         <Snackbar
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           open={snackbarOpen}

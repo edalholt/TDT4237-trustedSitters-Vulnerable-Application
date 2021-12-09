@@ -6,4 +6,11 @@ python manage.py migrate
 
 python manage.py collectstatic --noinput
 
+DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME} \
+DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD} \
+DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL} \
+python manage.py createsuperuser --noinput || \
+echo "WARNING: This error is ignored as it most likely is 'That username is already taken.'" \
+&& echo "If you wish to alter the user credentials, then delete the user first."
+
 gunicorn trustedsitters.wsgi --log-file - -b 0.0.0.0:8000

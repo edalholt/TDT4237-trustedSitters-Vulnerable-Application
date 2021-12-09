@@ -19,4 +19,7 @@ urlpatterns = [*router.urls,
                path('api/request-reset-password/',
                     views.PasswordResetEmailView.as_view(), name='password-reset-email'),
                path('api/reset-password-validate/',
-                    views.SetNewPasswordView.as_view(), name='password-reset-valid'), ]
+                    views.SetNewPasswordView.as_view(), name='password-reset-valid'), 
+               path('api/mfa/',
+               views.MFAView.as_view(), name='mfa')
+                    ]

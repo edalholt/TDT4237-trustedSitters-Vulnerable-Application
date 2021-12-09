@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer, ResetPasswordSerializer, SetNewPasswordSerializer
-from rest_framework import viewsets, filters, status, generics
+from rest_framework import permissions, viewsets, filters, status, generics, views
+from apps.users.serializers import RegisterSerializer, LoginSerializer, UserSerializer, ResetPasswordSerializer, SetNewPasswordSerializer, MFASerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -10,6 +10,8 @@ from django.shortcuts import redirect
 from django.contrib.sites.shortcuts import get_current_site
 import os
 from django.conf import settings
+import pyotp
+from .models import User
 from django.core.mail import EmailMessage
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
@@ -65,7 +67,7 @@ class LoginViewSet(viewsets.ModelViewSet, TokenObtainPairView):
             serializer.is_valid(raise_exception=True)
         except TokenError as e:
             raise InvalidToken(e.args[0])
-
+        
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
@@ -105,6 +107,49 @@ class VerificationView(generics.GenericAPIView):
             pass
 
         return redirect(invalid_url)
+
+
+class MFAView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MFASerializer
+
+    def get(self, request):
+        '''
+            Creates a new secret token if the user has not activated MFA, else return current token.
+        '''
+        user = User.objects.get(id = request.user.id)
+        if user.mfa_active==False:
+            secret_key = pyotp.random_base32()
+            user.mfa_token = secret_key
+            user.save()
+            mfa_token = pyotp.TOTP(secret_key).provisioning_uri(name=request.user.email, issuer_name='TrustedSitters')
+            return Response({'mfa_token': mfa_token, 'active': user.mfa_active})
+        else:
+            mfa_token = pyotp.TOTP(user.mfa_token).provisioning_uri(name=request.user.email, issuer_name='TrustedSitters')
+            return Response({'mfa_token': mfa_token, 'active': user.mfa_active})
+
+    def post(self, request):
+        '''
+            Verifies the provided one-time-password and sets the mfa_active User field to True
+        '''
+
+        serializer = self.serializer_class(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        user = User.objects.get(id = request.user.id)
+        if user.mfa_token is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        mfa_token = pyotp.TOTP(user.mfa_token)
+        if not user.mfa_active and mfa_token.verify(serializer.validated_data):
+            user.mfa_active=True
+            user.save()
+            return Response(status=status.HTTP_201_CREATED)
+        elif mfa_token.verify(serializer.validated_data):
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PasswordResetEmailView(generics.GenericAPIView):
