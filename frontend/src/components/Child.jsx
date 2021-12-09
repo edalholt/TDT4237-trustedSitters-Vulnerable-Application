@@ -12,9 +12,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
-import Link from "@mui/material/Link";
 import ChildrenService from "../services/children";
 import { Stack } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,6 +34,8 @@ const Child = ({ child, user, children, setChildren, files }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [expanded, setExpanded] = React.useState(false);
 
+  const [childFiles, setChildFiles] = useState(files);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -46,7 +48,10 @@ const Child = ({ child, user, children, setChildren, files }) => {
     formData.append("file", selectedFile);
     formData.append("child", child.id);
     ChildrenService.UploadChildFile(formData)
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log("File uploaded");
+        ChildrenService.GetChildFileInfos().then((c) => setChildFiles(c));
+      })
       .catch((error) => console.error(error));
   };
 
@@ -57,6 +62,25 @@ const Child = ({ child, user, children, setChildren, files }) => {
         window.open(URL.createObjectURL(file));
       })
       .catch((error) => console.error(error));
+  };
+
+  const deleteFile = (id) => {
+    ChildrenService.DeleteChildFile(id)
+      .then((response) => {
+        console.log("Deleted file");
+        setChildFiles(childFiles.filter((file) => file.id !== id));
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const removeGuardian = (childId, guardian) => {
+    ChildrenService.RemoveGuardian({ child: childId, guardian: guardian })
+      .then((response) => {
+        console.log("Removed Guardian");
+        // setGuardians(guardians.filter((g) => g !== guardian));
+        ChildrenService.GetChildren().then((c) => setChildren(c));
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -92,8 +116,32 @@ const Child = ({ child, user, children, setChildren, files }) => {
 
         {/* Contend inside dropdown */}
         <Collapse in={expanded} timeout='auto' unmountOnExit>
+          {user.username === child.parent ? (
+            <CardContent>
+              <Typography variant='h5' component='div'>
+                Guardians
+              </Typography>
+              {child.guardians?.map((g) => (
+                <Stack spacing={2} direction='row' justifyContent='right'>
+                  <Typography variant='h6' component='div'>
+                    {g}
+                  </Typography>
+                  <IconButton
+                    size='small'
+                    onClick={() => removeGuardian(child.id, g)}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                </Stack>
+              ))}
+            </CardContent>
+          ) : null}
+
           <CardContent>
-            {files
+            <Typography variant='h5' component='div'>
+              Files
+            </Typography>
+            {childFiles
               ?.filter((file) => file.child === child.id)
               .map((file) => (
                 <Stack spacing={2} direction='row' justifyContent='right'>
@@ -106,21 +154,37 @@ const Child = ({ child, user, children, setChildren, files }) => {
                     {file.name}
                   </Button>
                   {user.username === child.parent ? (
-                    <IconButton size='small'>
+                    <IconButton
+                      size='small'
+                      onClick={() => deleteFile(file.id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   ) : null}
                 </Stack>
               ))}
-
-            <input
-              type='file'
-              onChange={(e) => setSelectedFile(e.target.files[0])}
-            ></input>
+            {user.username === child.parent ? (
+              <input
+                type='file'
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+              ></input>
+            ) : null}
           </CardContent>
-          <CardActions>
-            <Button onClick={uploadFile}>Upload file</Button>
-          </CardActions>
+
+          {user.username === child.parent ? (
+            <CardActions>
+              <Button onClick={uploadFile}>Upload file</Button>
+            </CardActions>
+          ) : (
+            <CardActions>
+              <Button
+                variant='contained'
+                onClick={() => removeGuardian(child.id, user.username)}
+              >
+                Quit as guardian
+              </Button>
+            </CardActions>
+          )}
         </Collapse>
       </Card>
       <Modal open={open} onClose={handleClose}>

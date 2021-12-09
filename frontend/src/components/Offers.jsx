@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
@@ -14,33 +13,32 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 
 const Offers = ({ user }) => {
   const [offers, setOffers] = useState(null);
   const [recipient, setRecipient] = useState("");
 
   const [offerType, setOfferType] = useState("JOB_OFFER");
-  const handleOfferTypeChange = (event, newAlignment) => {
-    setOfferType(newAlignment);
+  const handleOfferTypeChange = (event, newType) => {
+    setOfferType(newType);
   };
 
-  const [pendingChecked, setPendingChecked] = React.useState(true);
+  const [pendingChecked, setPendingChecked] = useState(true);
 
   const handlePendingChange = (event) => {
     setPendingChecked(event.target.checked);
   };
-  const [answeredChecked, setAnsweredChecked] = React.useState(true);
+  const [answeredChecked, setAnsweredChecked] = useState(true);
 
   const handleAnsweredChange = (event) => {
     setAnsweredChecked(event.target.checked);
   };
-  const [senderChecked, setSenderChecked] = React.useState(true);
+  const [senderChecked, setSenderChecked] = useState(true);
 
   const handleSenderChange = (event) => {
     setSenderChecked(event.target.checked);
   };
-  const [recipientChecked, setRecipientChecked] = React.useState(true);
+  const [recipientChecked, setRecipientChecked] = useState(true);
 
   const handleRecipientChange = (event) => {
     setRecipientChecked(event.target.checked);
@@ -164,12 +162,13 @@ const Offers = ({ user }) => {
       ) : null}
       {pendingChecked ? (
         <>
-          <Typography sx={{ textAlign: "center" }} variant='h3'>
+          <Typography sx={{ textAlign: "center", mb: 1 }} variant='h3'>
             Pending offers
           </Typography>
           <Grid container spacing={1.5} justifyContent='center'>
             {offers
               ?.filter(
+                // Filter buttons logic
                 (o) =>
                   o.status === "P" &&
                   o.offerType === offerType &&
@@ -191,12 +190,13 @@ const Offers = ({ user }) => {
 
       {answeredChecked ? (
         <>
-          <Typography sx={{ textAlign: "center" }} variant='h3'>
+          <Typography sx={{ textAlign: "center", mt: 2, mb: 1 }} variant='h3'>
             Answered offers
           </Typography>
           <Grid container spacing={1.5} justifyContent='center'>
             {offers
               ?.filter(
+                // Filter buttons logic
                 (o) =>
                   o.status !== "P" &&
                   o.offerType === offerType &&

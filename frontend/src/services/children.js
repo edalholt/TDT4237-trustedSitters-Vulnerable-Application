@@ -34,6 +34,16 @@ const DownloadChildFile = (url) => {
   return request.then((response) => response.data);
 };
 
+const DeleteChildFile = (id) => {
+  const request = api.delete(`/child-file/${id}/`);
+  return request.then((response) => response.data);
+};
+
+const RemoveGuardian = (data) => {
+  const request = api.post("/remove-guardian/", data);
+  return request.then((response) => response.data);
+};
+
 const ChildrenService = {
   GetChildren,
   CreateChild,
@@ -41,6 +51,8 @@ const ChildrenService = {
   UploadChildFile,
   GetChildFileInfos,
   DownloadChildFile,
+  DeleteChildFile,
+  RemoveGuardian,
 };
 
 export default ChildrenService;

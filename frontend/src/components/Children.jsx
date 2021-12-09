@@ -38,7 +38,7 @@ const Children = ({ user }) => {
         existing ones. If you are Guardian for any children, you can also see
         the information for those children.
       </Typography>
-      <Typography sx={{ textAlign: "center" }} variant='h4'>
+      <Typography sx={{ textAlign: "center", mt: 1, mb: 1 }} variant='h4'>
         My Children
       </Typography>
 
@@ -78,7 +78,7 @@ const Children = ({ user }) => {
           setChildren={setChildren}
         ></EditChild>
       </Modal>
-      <Typography sx={{ textAlign: "center" }} variant='h4'>
+      <Typography sx={{ textAlign: "center", mt: 2, mb: 1 }} variant='h4'>
         Guardian Children
       </Typography>
 

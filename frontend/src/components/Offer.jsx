@@ -121,18 +121,18 @@ const Offer = ({ offer, user, onUpdate }) => {
               <Button
                 size='small'
                 variant='contained'
-                color='success'
-                onClick={() => answerOffer("A")}
-              >
-                Accept
-              </Button>
-              <Button
-                size='small'
-                variant='contained'
                 color='error'
                 onClick={() => answerOffer("D")}
               >
                 Decline
+              </Button>
+              <Button
+                size='small'
+                variant='contained'
+                color='success'
+                onClick={() => answerOffer("A")}
+              >
+                Accept
               </Button>
             </Stack>
           ) : null}
