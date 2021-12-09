@@ -16,6 +16,21 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AdvertsService from "../services/adverts";
 import OfferService from "../services/offers";
+import Collapse from "@mui/material/Collapse";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+
+// Custom rotating expanding icon
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 const Advert = ({
   advert,
@@ -37,6 +52,11 @@ const Advert = ({
   const handleOfferOpen = () => setOfferOpen(true);
   const handleOfferClose = () => setOfferOpen(false);
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
   const deleteAdvert = (e) => {
     e.preventDefault();
     AdvertsService.DeleteAdvert(advert.id)
@@ -69,17 +89,26 @@ const Advert = ({
     <>
       <Card>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
-            {advert.date}
+          <Typography sx={{ fontSize: 14 }} color='text.secondary'>
+            Type:{" "}
+            {advert.advertType === "IS_SITTER"
+              ? "Is Babysitter"
+              : "Need Babysitter"}
           </Typography>
-          <Typography variant='h5' component='div'>
-            {advert.advertType}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color='text.secondary'>
+          <Typography color='text.secondary'>{advert.date}</Typography>
+          <Typography sx={{ fontSize: 14 }} color='text.secondary'>
             {advert.start_time} -- {advert.end_time}
           </Typography>
-          <Typography variant='body2'>{advert.content}</Typography>
+          <Typography sx={{ mb: 0 }} variant='body1' component='div'>
+            Owner: {advert.owner}
+          </Typography>
         </CardContent>
+
+        <Collapse in={expanded} timeout='auto' unmountOnExit>
+          <CardContent>
+            <Typography variant='body2'>{advert.content}</Typography>
+          </CardContent>
+        </Collapse>
 
         <CardActions>
           {user?.username === advert.owner ? (
@@ -92,10 +121,20 @@ const Advert = ({
               </IconButton>
             </div>
           ) : (
-            <Button onClick={handleOfferOpen} size='small'>
-              Make offer
-            </Button>
+            <div>
+              <Button onClick={handleOfferOpen} size='small'>
+                Make offer
+              </Button>
+            </div>
           )}
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label='show more'
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
         </CardActions>
       </Card>
       <Modal open={open} onClose={handleClose}>

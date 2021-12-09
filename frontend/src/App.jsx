@@ -150,12 +150,10 @@ const App = () => {
             <Contracts user={user} />
           </Route>
           <Route path='/security'>
-            <Security 
-              user={user}
-            />
+            <Security user={user} />
           </Route>
           <Route path='/'>
-            <Home />
+            <Home user={user} />
           </Route>
         </Switch>
         <Snackbar

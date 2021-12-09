@@ -13,15 +13,18 @@ const Contracts = ({ user }) => {
     console.log("effect");
     ContractsService.GetContracts().then((c) => setContracts(c));
   }, []);
+
   return (
     <Container>
       <Typography sx={{ textAlign: "center" }} variant='h2'>
         Contracts
       </Typography>
       <Typography sx={{ textAlign: "center" }} variant='body'>
-        *short description of the Contracts page*
+        Welcome to the Contracts page. Here you can see your active contracts,
+        and finished ones. If you are a babysitter, you can also see the
+        information about children in active contracts.
       </Typography>
-      <Typography sx={{ textAlign: "center" }} variant='h5'>
+      <Typography sx={{ textAlign: "center", mt: 2, mb: 1 }} variant='h5'>
         Active Contracts
       </Typography>
       <Grid container spacing={1.5} justifyContent='center'>
@@ -29,11 +32,16 @@ const Contracts = ({ user }) => {
           ?.filter((c) => c.finished === false)
           .map((contract) => (
             <Grid key={contract.id} item xs={3}>
-              <Contract contract={contract} user={user}></Contract>
+              <Contract
+                contracts={contracts}
+                setContracts={setContracts}
+                contract={contract}
+                user={user}
+              ></Contract>
             </Grid>
           ))}
       </Grid>
-      <Typography sx={{ textAlign: "center" }} variant='h5'>
+      <Typography sx={{ textAlign: "center", mt: 2, mb: 1 }} variant='h5'>
         Finished Contracts
       </Typography>
       <Grid container spacing={1.5} justifyContent='center'>

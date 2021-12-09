@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { Stack } from "@mui/material";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import Link from "@mui/material/Link";
-const Home = () => {
+const Home = ({ user }) => {
   const history = useHistory();
+
+  useEffect(() => {
+    if (user !== null) {
+      history.push("/adverts");
+    }
+  }, []);
 
   return (
     <Container maxWidth='xl'>

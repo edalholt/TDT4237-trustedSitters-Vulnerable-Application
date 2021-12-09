@@ -68,8 +68,12 @@ const Offers = ({ user }) => {
     <Container>
       <Stack spacing={2} margin={5} justifyContent='center'>
         <Typography sx={{ textAlign: "center" }} variant='body'>
-          *short description of the Offers page*
+          Welcome to the Offers page. Here you can find all pending and
+          previously answer offers. Accept or decline the offers by clicking the
+          buttons. You can also send a Guardian offer from this page, asking
+          another user if you can become guardian for their children.
         </Typography>
+
         <ToggleButtonGroup
           sx={{ justifyContent: "center" }}
           value={offerType}

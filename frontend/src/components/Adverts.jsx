@@ -13,6 +13,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import Box from "@mui/material/Box";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -65,7 +66,10 @@ const Adverts = ({ user }) => {
         Adverts
       </Typography>
       <Typography sx={{ textAlign: "center" }} variant='body'>
-        *short description of the Adverts page*
+        Welcome to the Adverts page. Here you can see the adverts posted by
+        other users, and create your own adverts. There are two types of
+        adverts, one for wanting a babysitter, and one for offering your
+        services as a babysitter.
       </Typography>
 
       <Fab
@@ -78,12 +82,13 @@ const Adverts = ({ user }) => {
         <AddIcon sx={{ mr: 1 }} />
         Create new advert
       </Fab>
-
-      <Dropdown
-        options={Object.keys(optionsDictionary)}
-        onChange={handleOrderBy}
-        placeholder='Order by...'
-      />
+      <Box sx={{ mt: 1, mb: 2 }}>
+        <Dropdown
+          options={Object.keys(optionsDictionary)}
+          onChange={handleOrderBy}
+          placeholder='Order by...'
+        />
+      </Box>
 
       <Grid container spacing={1.5} justifyContent='center'>
         {adverts?.map((advert) => (

@@ -10,17 +10,39 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Collapse from "@mui/material/Collapse";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
 
-const Contract = ({ user, contract }) => {
+// Custom rotating expanding icon
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+const Contract = ({ user, contract, contracts, setContracts }) => {
   const finishContract = (e) => {
     e.preventDefault();
 
     ContractsService.FinishContract({ contractId: contract.contractId })
       .then((response) => {
         console.log(response);
-        // contract.finished = true;
         setOpen(false);
-        // TODO: Snackbar confirmation and rerender
+        contract.finished = true;
+        let updated = contracts.filter(
+          (c) => c.contractId !== contract.contractId
+        );
+
+        updated = updated.concat(contract);
+        setContracts(updated);
+        // TODO: Snackbar confirmation
       })
       .catch((error) => {
         console.log(error.response?.data);
@@ -31,6 +53,12 @@ const Contract = ({ user, contract }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <>
       <Card>
@@ -38,25 +66,39 @@ const Contract = ({ user, contract }) => {
           <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
             {contract.date}
           </Typography>
-          <Typography variant='h5' component='div'>
+          <Typography variant='h6' component='div'>
             Parent: {contract.parent}
           </Typography>
-          <Typography variant='h5' component='div'>
+          <Typography variant='h6' component='div'>
             Sitter: {contract.sitter}
           </Typography>
 
           <Typography sx={{ mb: 1.5 }} color='text.secondary'>
             {contract.start_time} -- {contract.end_time}
           </Typography>
-          <Typography variant='body2'>{contract.content}</Typography>
+          <Collapse in={expanded} timeout='auto' unmountOnExit>
+            <CardContent>
+              <Typography variant='body2'>{contract.content}</Typography>
+            </CardContent>
+          </Collapse>
         </CardContent>
 
         <CardActions>
           {user?.username === contract.parent && !contract.finished ? (
-            <Button onClick={handleOpen} size='small'>
-              Finish contract
-            </Button>
+            <div>
+              <Button onClick={handleOpen} size='small'>
+                Finish Contract
+              </Button>
+            </div>
           ) : null}
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label='show more'
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
         </CardActions>
       </Card>
       <Dialog

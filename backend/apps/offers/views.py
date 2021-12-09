@@ -119,8 +119,6 @@ class AnswerOfferView(generics.GenericAPIView):
                     ad.save()
                     contract.save()
 
-                    # ad.delete()
-
                 offer.save()
                 return Response({'success': True, 'message': 'Offer accepted'}, status=status.HTTP_200_OK)
 

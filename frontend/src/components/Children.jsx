@@ -31,11 +31,17 @@ const Children = ({ user }) => {
   return (
     <Container>
       <Typography sx={{ textAlign: "center" }} variant='h3'>
-        My Children
+        Children
       </Typography>
       <Typography sx={{ textAlign: "center" }} variant='body'>
-        *short description of the Children page*
+        Welcome to the Children page. Here you can add new child entries or edit
+        existing ones. If you are Guardian for any children, you can also see
+        the information for those children.
       </Typography>
+      <Typography sx={{ textAlign: "center" }} variant='h4'>
+        My Children
+      </Typography>
+
       <Fab
         sx={fabStyle}
         variant='extended'
@@ -72,7 +78,7 @@ const Children = ({ user }) => {
           setChildren={setChildren}
         ></EditChild>
       </Modal>
-      <Typography sx={{ textAlign: "center" }} variant='h3'>
+      <Typography sx={{ textAlign: "center" }} variant='h4'>
         Guardian Children
       </Typography>
 

@@ -89,6 +89,8 @@ const Child = ({ child, user, children, setChildren, files }) => {
             <ExpandMoreIcon />
           </ExpandMore>
         </CardActions>
+
+        {/* Contend inside dropdown */}
         <Collapse in={expanded} timeout='auto' unmountOnExit>
           <CardContent>
             {files
