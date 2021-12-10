@@ -69,6 +69,9 @@ const Contract = ({ user, contract, contracts, setContracts }) => {
           <Typography variant='h6' component='div'>
             Parent: {contract.parent}
           </Typography>
+          <Typography sx={{ fontSize: 14 }} color='text.secondary'>
+            E-mail: {contract.parentEmail}
+          </Typography>
           <Typography variant='h6' component='div'>
             Sitter: {contract.sitter}
           </Typography>

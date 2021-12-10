@@ -49,6 +49,11 @@ const RemoveGuardian = (data) => {
   return request.then((response) => response.data);
 };
 
+const GetActiveContractChildren = () => {
+  const request = api.get("/active-contract-children/");
+  return request.then((response) => response.data);
+};
+
 const ChildrenService = {
   GetChildren,
   CreateChild,
@@ -59,6 +64,7 @@ const ChildrenService = {
   DownloadChildFile,
   DeleteChildFile,
   RemoveGuardian,
+  GetActiveContractChildren,
 };
 
 export default ChildrenService;

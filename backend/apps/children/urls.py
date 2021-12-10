@@ -11,4 +11,6 @@ router.register('api/child-file', views.ChildFileViewSet,
 
 urlpatterns = [*router.urls, path("api/child-file-download/<int:pk>/",
                                   views.ChildFileDownloadView.as_view(), name="child-file-download"),
-               path("api/remove-guardian/", views.RemoveGuardianView.as_view(), name="remove-guardian")]
+               path("api/remove-guardian/",
+                    views.RemoveGuardianView.as_view(), name="remove-guardian"),
+               path("api/active-contract-children/", views.ActiveContractChildView.as_view(), name="active-contract")]

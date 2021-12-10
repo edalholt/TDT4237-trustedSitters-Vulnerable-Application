@@ -19,10 +19,15 @@ class ContractSerializer(serializers.ModelSerializer):
 
     contractId = serializers.SerializerMethodField()
 
+    parentEmail = serializers.SerializerMethodField()
+
     class Meta:
         model = Contract
         fields = ('id', 'parent', 'sitter', 'contractId', 'content', 'date',
-                  'start_time', 'end_time', 'finished')
+                  'start_time', 'end_time', 'finished', 'parentEmail')
 
     def get_contractId(self, obj):
         return base64.b64encode(pickle.dumps(obj.id))
+
+    def get_parentEmail(self, obj):
+        return obj.parent.email
