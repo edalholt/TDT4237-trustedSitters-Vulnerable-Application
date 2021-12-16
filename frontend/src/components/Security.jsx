@@ -41,6 +41,9 @@ const Security = ({ user }) => {
       <Typography sx={{ textAlign: "center" }} variant='h2'>
         Security
       </Typography>
+      <Typography variant='h5'>
+          Welcome to the Security page. Here you can activate two factor authentication for your account.
+        </Typography>
       <Typography>User: {user?.username}</Typography>
       <Typography>Email: {user?.email}</Typography>
       {!verified && !mfa_token ? (
