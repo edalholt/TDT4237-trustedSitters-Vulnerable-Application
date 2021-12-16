@@ -50,7 +50,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
     }
-  }, []);
+  }, [] );
 
   return (
     <Router>
@@ -153,7 +153,7 @@ const App = () => {
             <Security user={user} />
           </Route>
           <Route path='/'>
-            <Home user={user} />
+            <Home setUser={setUser} />
           </Route>
         </Switch>
         <Snackbar

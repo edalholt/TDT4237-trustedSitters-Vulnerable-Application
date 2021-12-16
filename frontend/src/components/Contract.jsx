@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import ContractsService from "../services/contract";
+import ChildrenService from "../services/children";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -14,6 +15,24 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
+import { useEffect } from "react";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { Stack } from "@mui/material";
+
+// Custom box style
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  // width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2,
+};
 
 // Custom rotating expanding icon
 const ExpandMore = styled((props) => {
@@ -28,6 +47,17 @@ const ExpandMore = styled((props) => {
 }));
 
 const Contract = ({ user, contract, contracts, setContracts }) => {
+  const [children, setChildren] = useState(null);
+
+  const [openChildren, setOpenChildren] = useState(false);
+  const handleOpenChildren = () => setOpenChildren(true);
+  const handleCloseChildren = () => setOpenChildren(false);
+
+  useEffect(() => {
+    console.log("effect");
+    ChildrenService.GetActiveContractChildren().then((c) => setChildren(c));
+  }, []);
+
   const finishContract = (e) => {
     e.preventDefault();
 
@@ -63,25 +93,25 @@ const Contract = ({ user, contract, contracts, setContracts }) => {
     <>
       <Card>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {contract.date}
           </Typography>
-          <Typography variant='h6' component='div'>
+          <Typography variant="h6" component="div">
             Parent: {contract.parent}
           </Typography>
-          <Typography sx={{ fontSize: 14 }} color='text.secondary'>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary">
             E-mail: {contract.parentEmail}
           </Typography>
-          <Typography variant='h6' component='div'>
+          <Typography variant="h6" component="div">
             Sitter: {contract.sitter}
           </Typography>
 
-          <Typography sx={{ mb: 1.5 }} color='text.secondary'>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {contract.start_time} -- {contract.end_time}
           </Typography>
-          <Collapse in={expanded} timeout='auto' unmountOnExit>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography variant='body2'>{contract.content}</Typography>
+              <Typography variant="body2">{contract.content}</Typography>
             </CardContent>
           </Collapse>
         </CardContent>
@@ -89,16 +119,25 @@ const Contract = ({ user, contract, contracts, setContracts }) => {
         <CardActions>
           {user?.username === contract.parent && !contract.finished ? (
             <div>
-              <Button onClick={handleOpen} size='small'>
+              <Button onClick={handleOpen} size="small">
                 Finish Contract
               </Button>
             </div>
-          ) : null}
+          ) : (
+            contract.finished ? null :
+            (
+              <div>
+              <Button onClick={handleOpenChildren} size="small">
+                Show children
+              </Button>
+            </div>
+              )
+          )}
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
             aria-expanded={expanded}
-            aria-label='show more'
+            aria-label="show more"
           >
             <ExpandMoreIcon />
           </ExpandMore>
@@ -107,12 +146,12 @@ const Contract = ({ user, contract, contracts, setContracts }) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id='alert-dialog-title'>{"Finish contract"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Finish contract"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
+          <DialogContentText id="alert-dialog-description">
             Are you sure you want to finish the contract?
           </DialogContentText>
         </DialogContent>
@@ -123,6 +162,42 @@ const Contract = ({ user, contract, contracts, setContracts }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Modal open={openChildren} onClose={handleCloseChildren}>
+        <Box sx={style}>
+          <Grid container spacing={1.5} justifyContent="center">
+            {children
+              ?.filter((c) => c.parent === contract.parent)
+              .map((child) => (
+                <Grid key={child.id} item xs={6}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {child.name}
+                      </Typography>
+                      {child.info}
+
+                      <Typography variant="h6" component="div">
+                        Guardians
+                      </Typography>
+                      {child.guardians?.map((g) => (
+                        <Stack
+                          spacing={2}
+                          direction="row"
+                          justifyContent="right"
+                        >
+                          <Typography variant="body" component="div">
+                            {g}
+                          </Typography>
+                        </Stack>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+          </Grid>
+        </Box>
+      </Modal>
     </>
   );
 };
