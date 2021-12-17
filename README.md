@@ -30,6 +30,7 @@ Before running the backend one should use a virtual environment (https://virtual
 
 - `python -m pip install --user virtualenv`
 - `virtualenv venv`
+- `source venv/bin/activate`
 
 To run the backend server, run the following commands:
 
