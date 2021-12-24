@@ -9,13 +9,17 @@ The following must be installed before running this application.
 - [Python >= 3.7](https://www.python.org/)
 - [Node >= 12](https://nodejs.org/en/)
 
-### Cloning with personal access tokens
+### Alternative 1: Clone with personal access tokens
 
 New Gitlab security features require generation of personal access tokens. To clone the repository you have to:
 
 - Generate your own token https://gitlab.stud.idi.ntnu.no/-/profile/personal_access_tokens
 - `git clone https://oauth2:<YOUR-ACCESS-TOKEN>@gitlab.stud.idi.ntnu.no/tdt4237/trustedsitters.git/`
 - `cd trustedsitters`
+
+### Alternative 2: Clone with SSH keys
+
+- Instructions from Gitlab: https://gitlab.stud.iie.ntnu.no/-/profile/keys
 
 All commands from here on out are within the trustedsitters directory unless specified.
 
