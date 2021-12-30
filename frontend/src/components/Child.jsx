@@ -221,7 +221,7 @@ const Child = ({ child, user, children, setChildren, files }) => {
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id='alert-dialog-title'>{"Delete advert?"}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{"Delete child entry?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
             Are you sure you want to delete this child entry? This cannot be

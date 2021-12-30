@@ -33,20 +33,17 @@ const EditChild = (props) => {
 
       ChildrenService.CreateChild(request)
         .then((newChild) => {
-          // TODO: Popup snackbar with confirmation message
           console.log(newChild);
+          // Update children and open popup snackbar
           props.setChildren(props.children.concat(newChild));
           props.setOpen(false);
         })
         .catch((err) => console.log(err.response?.data));
     } else if (props.action === "Edit") {
-      // TODO: Send Patch request
       ChildrenService.EditChild(props.child.id, request)
         .then((editChild) => {
-          // TODO: Popup snackbar with confirmation message
-
           let t = props.children.filter((c) => c.id !== props.child.id);
-
+          // Update children and open popup snackbar
           props.setChildren(t.concat(editChild));
           props.setOpen(false);
         })
@@ -56,7 +53,7 @@ const EditChild = (props) => {
 
   return (
     <Box sx={style}>
-      <Typography sx={{ textAlign: "center" }} variant='h3'>
+      <Typography sx={{ textAlign: "center" }} variant="h3">
         {props.title}
       </Typography>
       <form onSubmit={onSubmit}>
@@ -75,15 +72,15 @@ const EditChild = (props) => {
             label={"Info"}
             required
           />
-          <Stack spacing={2} direction='row' justifyContent='center'>
+          <Stack spacing={2} direction="row" justifyContent="center">
             <Button
-              variant='contained'
-              color='error'
+              variant="contained"
+              color="error"
               onClick={props.handleClose}
             >
               Cancel
             </Button>
-            <Button variant='contained' color='success' type='submit'>
+            <Button variant="contained" color="success" type="submit">
               {props.action}
             </Button>
           </Stack>
