@@ -1,39 +1,53 @@
 # TrustedSitters
 
-Vulnerable Application for TDT4237 Spring 2022
+Vulnerable Application for TDT4237 Spring 2022.
 
 ## Prerequisites
 
-The following must be installed before running this application
+The following must be installed before running this application.
 
 - [Python >= 3.7](https://www.python.org/)
 - [Node >= 12](https://nodejs.org/en/)
 
-## Setup
+### Alternative 1: Clone with personal access tokens
 
-First one must retrieve the source code:
+New Gitlab security features require generation of personal access tokens. To clone the repository you have to:
 
-- `git clone https://gitlab.stud.idi.ntnu.no/tdt4237/trustedsitters.git`
+- Generate your own token https://gitlab.stud.idi.ntnu.no/-/profile/personal_access_tokens
+- `git clone https://oauth2:<YOUR-ACCESS-TOKEN>@gitlab.stud.idi.ntnu.no/tdt4237/trustedsitters.git/`
 - `cd trustedsitters`
 
-All commands from here on out are within the trustedsitters directory.
+### Alternative 2: Clone with SSH keys
 
-### Development
+- Instructions from Gitlab: https://gitlab.stud.iie.ntnu.no/-/profile/keys
+
+All commands from here on out are within the trustedsitters directory unless specified.
+
+## Development
 
 The following sections describe how one should run the backend and frontend code for development purposes.
 
-#### Backend
+### Backend
+
+Go to the backend directory:
+
+- `cd backend`
+
+Before running the backend one should use a virtual environment (https://virtualenv.pypa.io/en/latest/index.html):
+
+- `python -m pip install --user virtualenv`
+- `virtualenv venv`
+- `source venv/bin/activate`
 
 To run the backend server, run the following commands:
 
-- `cd backend`
 - `pip install -r requirements.txt`
 - `python manage.py migrate`
 - `python manage.py runserver`
 
-After installing once, you only need to run the `python manage.py runserver` command to start the django server
+After installing once, you only need to run the `python manage.py runserver` command to start the django server.
 
-#### Frontend
+### Frontend
 
 To run the frontend server, run the following commands:
 
@@ -43,16 +57,16 @@ To run the frontend server, run the following commands:
 
 After installing once, you only need to run the `npm start` command to start the react server
 
-### Deployment
+## Deployment
 
 The following sections describe how to run the application with Docker and Gitlab Runner. We are using Docker to prevent issues with different versions and platforms, effectively "it runs on my computer" (but only there), should not be an issue. Your application will always be evaluated when being deployed by Docker. 
 
-#### Docker
+### Docker
 
 - Install Docker Desktop: https://docs.docker.com/engine/install/
 - `docker-compose up --build`
 
-#### Gitlab Runner
+### Gitlab Runner
 
 The repository is configured such that changes pushed to the "production" branch will automatically be deployed on molde.idi.ntnu.no:21XXX (XXX = GroupID). This can be used for testing the deployed application and should be used for pushing code after fixing vulnerabilities. Typical workflow after finishing development on the master branch would be:
 
