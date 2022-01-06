@@ -40,7 +40,7 @@ Before running the backend one should use a [virtualenvironment](https://virtual
 
 - `pip install --user virtualenv`
 - `virtualenv venv`
-- `source venv/bin/activate`
+- `source venv/bin/activate` or `source venv/Scripts/activate` depending on the folders generated.
 
 To run the backend server, run the following commands:
 
