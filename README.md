@@ -40,7 +40,7 @@ Before running the backend one should use a [virtualenvironment](https://virtual
 
 - `pip install --user virtualenv`
 - `virtualenv venv`
-- `source venv/bin/activate`
+- `source venv/bin/activate` or `source venv/Scripts/activate` depending on the folders generated (UNIX/Windows).
 
 To run the backend server, run the following commands:
 
@@ -48,7 +48,15 @@ To run the backend server, run the following commands:
 - `python manage.py migrate`
 - `python manage.py runserver`
 
+The instance will be running at http://localhost:8000/ and code changes should update the running code automatically when saving.
+
 After installing once, you only need to run the `python manage.py runserver` command to start the django server.
+
+Admin users can be created with
+
+- `python manage.py createsuperuser`
+
+The admin page can be accessed at http://localhost:8000/admin/
 
 ### Frontend
 
@@ -58,7 +66,9 @@ To run the frontend server, run the following commands:
 - `npm ci`
 - `npm start`
 
-After installing once, you only need to run the `npm start` command to start the react server
+After installing once, you only need to run the `npm start` command to start the react server.
+
+The instance will be running at http://localhost:3000/ and code changes should update the running code automatically when saving.
 
 ## Deployment
 
@@ -68,14 +78,18 @@ The following sections describe how to run the application with Docker and Gitla
 
 - `docker-compose up --build`
 
+This might take a little while, and the frontend build takes additional time, a minute or so. If the page shows "502 Bad Gateway", then one must wait untill docker completes "Creating an optimized production build...". This also holds when deploying with Gitlab Runner. The application will eventually run on http://localhost:21XXX/ (XXX = GroupID).
+
 ### Gitlab Runner
 
-The repository is configured such that changes pushed to the "production" branch will automatically be deployed on molde.idi.ntnu.no:21XXX (XXX = GroupID). This can be used for testing the deployed application and should be used for pushing code after fixing vulnerabilities. Typical workflow after finishing development on the master branch would be:
+The repository is configured such that changes pushed to the "production" branch will automatically be deployed on http://molde.idi.ntnu.no:21XXX/ (XXX = GroupID). This can be used for testing the deployed application and should be used for pushing code after fixing vulnerabilities. Typical workflow after finishing development on the master branch would be:
 
 - `git checkout production`
 - `git merge master`
 - `git push origin production`
 - Go to "CI/CD" and "pipelines" within this Gitlab repository to monitor deployment.
+
+This will at least take a few minutes, or up to around 10 minutes if there are several groups deploying at once. If the panel shows that the job is "pending", then that is because the runners are in use by different groups and you will have to wait untill they are complete before the job starts. There are 10 runners in total. Meaning that only 10 groups can execute a job simultaneously. Therefore, one should only push to production when the code has already been tested locally.
 
 ## Assumptions
 

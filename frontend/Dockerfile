@@ -36,5 +36,8 @@ COPY --chown=node:node . ./
 # Set the host variable in default.js (overwrite)
 RUN echo "REACT_APP_API_URL='${PROTOCOL}://${DOMAIN}:${PORT_PREFIX}${GROUP_ID}/api'" > ./.env
 
+# Convert entrypoint script to unix format if PC is running windows
+RUN dos2unix entrypoint.sh
+
 # Start app
 CMD ["/bin/bash", "entrypoint.sh"]
