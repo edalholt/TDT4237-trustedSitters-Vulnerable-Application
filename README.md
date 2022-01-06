@@ -6,8 +6,11 @@ Vulnerable Application for TDT4237 Spring 2022.
 
 The following must be installed before running this application.
 
-- [Python >= 3.7](https://www.python.org/)
-- [Node >= 12](https://nodejs.org/en/)
+- [VPN](https://i.ntnu.no/wiki/-/wiki/English/Install+VPN) - Access git resources
+- [Git](https://git-scm.com/downloads/) - Git remote procedure calls must be used through the campus network or VPN
+- [Docker Desktop](https://docs.docker.com/engine/install/) - Deployment
+- [Python >= 3.7](https://www.python.org/) - Development
+- [Node >= 12](https://nodejs.org/en/) - Development
 
 ### Alternative 1: Clone with personal access tokens
 
@@ -33,9 +36,9 @@ Go to the backend directory:
 
 - `cd backend`
 
-Before running the backend one should use a virtual environment (https://virtualenv.pypa.io/en/latest/index.html):
+Before running the backend one should use a [virtualenvironment](https://virtualenv.pypa.io/en/latest/index.html):
 
-- `python -m pip install --user virtualenv`
+- `pip install --user virtualenv`
 - `virtualenv venv`
 - `source venv/bin/activate`
 
@@ -63,7 +66,6 @@ The following sections describe how to run the application with Docker and Gitla
 
 ### Docker
 
-- Install Docker Desktop: https://docs.docker.com/engine/install/
 - `docker-compose up --build`
 
 ### Gitlab Runner

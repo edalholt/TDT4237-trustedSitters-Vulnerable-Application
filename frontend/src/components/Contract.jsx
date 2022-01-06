@@ -27,7 +27,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  // width: 400,
+  width: 500,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -123,15 +123,12 @@ const Contract = ({ user, contract, contracts, setContracts }) => {
                 Finish Contract
               </Button>
             </div>
-          ) : (
-            contract.finished ? null :
-            (
-              <div>
+          ) : contract.finished ? null : (
+            <div>
               <Button onClick={handleOpenChildren} size="small">
                 Show children
               </Button>
             </div>
-              )
           )}
           <ExpandMore
             expand={expanded}
