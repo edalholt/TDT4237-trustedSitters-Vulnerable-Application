@@ -27,7 +27,7 @@ const Home = ({ setUser }) => {
       >
         <Typography sx={{ textAlign: "center" }} variant="h4">
           Welcome to TrustedSitters, the most secure babysitting booking
-          application on the web!
+          application on the web!!!
         </Typography>
         <img
           alt="logo"
