@@ -94,3 +94,12 @@ This will at least take a few minutes, or up to around 10 minutes if there are s
 ## Assumptions
 
 - The .env file is assumed to be an external file, and would not be part of this repository for a real project. Having passwords in a file on the hosted repository is considered a security risk.
+
+## Known issues
+
+### MFA bug
+
+The MFA otp might ocasionally get bugged and become invalid even when it should be valid. The precondition is not known for certain. But it seems to happen when recreating the project from a new clone. If this happens then it might help to flush the database. You will have to recreate the token in the authenticator app aswell.
+
+- `python3 manage.py flush`
+- `python3 manage.py runserver`
