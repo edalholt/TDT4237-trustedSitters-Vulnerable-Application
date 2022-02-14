@@ -20,6 +20,7 @@ import Security from "./components/Security";
 import Home from "./components/Home";
 import Avatar from "@mui/material/Avatar";
 import ResetPassword from "./components/ResetPassword";
+import Toys from "./components/Toys";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
@@ -50,7 +51,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
     }
-  }, [] );
+  }, []);
 
   return (
     <Router>
@@ -79,8 +80,15 @@ const App = () => {
                 <Button color='inherit' component={Link} to='/security'>
                   security
                 </Button>
+                <Button color='inherit' component={Link} to='/toys'>
+                  toys
+                </Button>
               </Grid>
-            ) : null}
+            ) : (
+              <Button color='inherit' component={Link} to='/toys'>
+                toys
+              </Button>
+            )}
           </Grid>
           <Grid container justifyContent='flex-end'>
             <Grid item>
@@ -151,6 +159,9 @@ const App = () => {
           </Route>
           <Route path='/security'>
             <Security user={user} />
+          </Route>
+          <Route path='/toys'>
+            <Toys />
           </Route>
           <Route path='/'>
             <Home setUser={setUser} />
