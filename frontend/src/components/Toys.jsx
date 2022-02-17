@@ -22,6 +22,7 @@ const Toys = () => {
   useEffect(() => {
     console.log("Hello");
     updateToys();
+    // console.log(toys);
   }, []);
 
   const uploadToy = () => {
@@ -54,7 +55,7 @@ const Toys = () => {
         </Button>
       </Stack>
       {toys?.map((t) => (
-        <h4 key={t.description}>
+        <h4 key={t.id}>
           {t.description}, {t.price}
         </h4>
       ))}

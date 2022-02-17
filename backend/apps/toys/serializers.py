@@ -3,8 +3,7 @@ from .models import Toy
 
 
 class ToySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Toy
 
-        fields = ('price', 'description')
+        fields = ('price', 'description', 'id')
