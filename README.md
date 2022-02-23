@@ -39,7 +39,7 @@ Go to the backend directory:
 Before running the backend one should use a [virtualenvironment](https://virtualenv.pypa.io/en/latest/index.html):
 
 - `pip install --user virtualenv`
-- `virtualenv venv`
+- `virtualenv venv` or `python3 -m venv venv`
 - `source venv/bin/activate` or `source venv/Scripts/activate` depending on the folders generated (UNIX/Windows).
 
 To run the backend server, run the following commands:
