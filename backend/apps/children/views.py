@@ -15,6 +15,7 @@ from apps.offers.models import Contract
 class ChildViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
+    #Forgot to add "permissions.IsAuthenticated" in permission class
     permission_classes = [IsParentOrReadOnly, ]
 
     def perform_create(self, serializer):
