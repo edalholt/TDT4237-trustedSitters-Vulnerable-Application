@@ -91,6 +91,9 @@ class VerificationView(generics.GenericAPIView):
         verified_url = settings.URL + "/verified"
         invalid_url = settings.URL + "/invalid"
         try:
+            # Users can get user.id from response data when creating user, 
+            # and then access api/verify-email/user.id/1 to activate user 
+            # without owning the e-mail account
             id = uid
             user = get_user_model().objects.get(pk=id)
             if status == "1":
