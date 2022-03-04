@@ -36,6 +36,8 @@ URL = PROTOCOL + '://' + DOMAIN + ':' + PORT_PREFIX + GROUP_ID
 # Usage: https://docs.djangoproject.com/en/3.1/topics/email/#obtaining-an-instance-of-an-email-backend
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.stud.ntnu.no"
+
+#Email sent from server should be encrypted
 EMAIL_USE_TLS = False
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = "tdt4237-group" + GROUP_ID + " " + "<noreply@idi.ntnu.no>"
