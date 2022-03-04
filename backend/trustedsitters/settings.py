@@ -138,6 +138,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Very insecure to store passwords unsalted
+# From django source code (https://github.com/django/django/blob/1.6.1/django/contrib/auth/hashers.py#L449):
+"""
+Incredibly insecure algorithm that you should *never* use; stores unsalted
+MD5 hashes without the algorithm prefix, also accepts MD5 hashes with an
+empty salt.
+This class is implemented because Django used to store passwords this way
+and to accept such password hashes. Some older Django installs still have
+these values lingering around so we need to handle and upgrade them
+properly.
+"""
+
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 ]
