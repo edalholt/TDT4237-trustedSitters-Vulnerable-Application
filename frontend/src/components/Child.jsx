@@ -107,6 +107,8 @@ const Child = ({ child, user, children, setChildren, files }) => {
           <Typography variant='h5' component='div'>
             {child.name}
           </Typography>
+          {/* Child info as part of the page-html, users able to run scripts from child elements,
+          guardians can see the same child info, and therefore an easy target for XSS-type attacs*/}
           <div dangerouslySetInnerHTML={{ __html: child.info }}></div>
         </CardContent>
 
