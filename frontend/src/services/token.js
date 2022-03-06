@@ -6,6 +6,9 @@ const setLocalRefreshToken = (token) => {
   localStorage.setItem("refresh_token", token);
 };
 
+//Bad practice to save login token in local storage
+//Token is accessible by any script inside page
+//Voulnable to XSS (cross-site-scripting) attack
 const getLocalAccessToken = () => {
   return localStorage.getItem("access_token");
 };
