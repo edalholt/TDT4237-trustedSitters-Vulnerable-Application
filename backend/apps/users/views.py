@@ -196,6 +196,7 @@ class ResetPasswordView(generics.GenericAPIView):
             if not username == user.username:  # Verify that the token is valid for the user
                 return redirect(invalid_url)
 
+            #Token is not changed ater password-reset, attacer could sniff URL and reuse reset-link
             return redirect(f'{new_password_url}?uid={uidb64}&token={token}')
 
         except Exception as ex:
