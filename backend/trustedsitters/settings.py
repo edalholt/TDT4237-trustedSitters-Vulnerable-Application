@@ -46,6 +46,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 #The secret key should not be stored in plaintext in the application, but in an .env file accessed through __init__.py
 SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t'
+
+#The field encryption key should not be stored here in plaintext, but in an .env file accessed through __init__.py
 FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', 'yXhjluyPu6bYlul9wyAaHW2CT25ky9W7TKC7h8y166E=')
 
 #Debug should be false in production, to hide debug response (error 404 instead)
