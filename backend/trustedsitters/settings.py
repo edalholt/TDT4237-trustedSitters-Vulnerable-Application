@@ -44,10 +44,10 @@ DEFAULT_FROM_EMAIL = "tdt4237-group" + GROUP_ID + " " + "<noreply@idi.ntnu.no>"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-#The secret key should not be stored in plaintext in the application, but in an .env file accessed through __init__.py
+#The secret key should not be stored in plaintext in the application, but in an .env file accessed through __init__.py -Frank
 SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t'
 
-#The field encryption key should not be stored here in plaintext, but in an .env file accessed through __init__.py
+#The field encryption key should not be stored here in plaintext, but in an .env file accessed through __init__.py -Frank
 FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', 'yXhjluyPu6bYlul9wyAaHW2CT25ky9W7TKC7h8y166E=')
 
 #Debug should be false in production, to hide debug response (error 404 instead)
@@ -196,7 +196,7 @@ REST_FRAMEWORK = {
     )
 }
 
-"The time values for these tokens are too great, also i cannot see that tokens are deletet on browser close."
+"The time values for these tokens are too great, also i cannot see that tokens are deletet on browser close. -Frank" 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=6000),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
