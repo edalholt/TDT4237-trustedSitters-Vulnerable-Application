@@ -194,7 +194,7 @@ REST_FRAMEWORK = {
     )
 }
 
-
+"The time values for these tokens are too great, also i cannot see that tokens are deletet on browser close."
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=6000),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
