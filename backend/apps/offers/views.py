@@ -23,6 +23,8 @@ class OfferViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         if self.request.data.get('recipient'):
+            #Vulnerable to SQL injection, user has direct access to application SQL - Eivind
+            #Tested with input (hei' OR 1=1--) wich returned all usernames in database.
             result = get_user_model().objects.raw(
                 "SELECT * from users_user WHERE username = '%s'" % self.request.data['recipient'])
 
