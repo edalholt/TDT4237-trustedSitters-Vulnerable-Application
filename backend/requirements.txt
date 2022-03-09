@@ -1,4 +1,9 @@
 asgiref==3.4.1
+"
+Django 3.2.4 has a known vulnerability that can be exploited in /views.AdvertViewSet.get_queryset()
+Where queryset = self.queryset.order_by(order_by) the order by is voulnerable to SQL injection.
+Patched in Django 3.2.5: https://docs.djangoproject.com/en/4.0/releases/3.2.5/
+"
 Django==3.2.4
 django-cors-headers==3.10.0
 djangorestframework==3.12.4
