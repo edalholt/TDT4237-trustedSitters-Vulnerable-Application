@@ -152,7 +152,7 @@ these values lingering around so we need to handle and upgrade them
 properly.
 """
 
-#Unsalted UnsaltedMD5PasswordHasher is being used to store passwords in the DB and is very insecure.
+#Unsalted UnsaltedMD5PasswordHasher is being used to store passwords in the DB and is very insecure. - Frank
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 ]
