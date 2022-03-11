@@ -79,6 +79,7 @@ class FinishContractView(generics.GenericAPIView):
 
 
 class AnswerOfferView(generics.GenericAPIView):
+    # Missing permission class here, all users can accept others' guardian offers - Eivind
 
     def post(self, request):
 
