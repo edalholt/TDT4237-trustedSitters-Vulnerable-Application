@@ -30,6 +30,8 @@ class LoginSerializer(TokenObtainPairSerializer):
 
         refresh = self.get_token(self.user)
 
+        # Valid session-token is returned even if mfa is not active, this makes the mfa useless
+        # User is therefore logged in before the mfa step - Eivind
         data['user'] = UserSerializer(self.user).data
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
