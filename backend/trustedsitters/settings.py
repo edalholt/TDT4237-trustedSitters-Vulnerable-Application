@@ -203,3 +203,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
     'ROTATE_REFRESH_TOKENS': True,
 }
+
+# There is no handling of application critical or warning messages 
+# to notify administrators of crashes and suspicious behaivior on the site
