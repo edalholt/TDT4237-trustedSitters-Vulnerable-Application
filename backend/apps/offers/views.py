@@ -67,6 +67,9 @@ class FinishContractView(generics.GenericAPIView):
 
     def post(self, request):
         if request.data.get('contractId'):
+            # Pickle could be voulnrable when deserializing data
+            # Quote from https://davidhamann.de/2020/04/05/exploiting-python-pickle/:
+            # "Warning: The pickle module is not secure. Only unpickle data you trust".
             cId = base64.b64decode(request.data.get('contractId'))
             cId = pickle.loads(cId)
             contract = Contract.objects.get(id=cId)
