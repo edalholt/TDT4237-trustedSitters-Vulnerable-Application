@@ -38,6 +38,8 @@ class ChildFileViewSet(viewsets.ModelViewSet):
         return ChildFileGetSerializer
 
     def perform_create(self, serializer):
+        # User can upload all filetypes
+        # Possible to upload executable code and trick user to download and run this on their system
         serializer.save(
             content_type=self.request.data.get('file').content_type)
 
