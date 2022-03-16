@@ -23,6 +23,8 @@ PRODUCTION = os.getenv('PRODUCTION', False)
 GROUP_ID = os.environ.get("GROUP_ID", "3000")
 PORT_PREFIX = os.environ.get("PORT_PREFIX", "")
 DOMAIN = os.environ.get("DOMAIN", "localhost")
+
+# Http is an easy choice when creating a web application, but should not be used in production
 PROTOCOL = os.environ.get("PROTOCOL", "http")
 
 # Set the URL used for redirecting
@@ -45,7 +47,9 @@ DEFAULT_FROM_EMAIL = "tdt4237-group" + GROUP_ID + " " + "<noreply@idi.ntnu.no>"
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 #The secret key should not be stored in plaintext in the application, but in an .env file accessed through __init__.py -Frank
+
 SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!t'
+#SECRET_KEY = 'asølkjwojdw09wdlg6u=986qz+fh2t!dj-i%)s*vebg@w&r92p2ci(ixc_25cm5!p'
 
 #The field encryption key should not be stored here in plaintext, but in an .env file accessed through __init__.py -Frank
 FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', 'yXhjluyPu6bYlul9wyAaHW2CT25ky9W7TKC7h8y166E=')
