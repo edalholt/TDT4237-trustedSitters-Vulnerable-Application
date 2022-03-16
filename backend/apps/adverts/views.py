@@ -4,8 +4,6 @@ from .serializers import AdvertSerializer
 from .permissions import IsOwnerOrReadOnly
 
 class NeedSitterAdvertViewSet(viewsets.ModelViewSet):
-    # Direct access to application SQL, the input is restricted in frontend
-    # hacer can send requests with different body in postman to manipulate SQL - Eivind
     queryset = Advert.objects.raw(
         'SELECT * FROM adverts_advert WHERE advertType = %s', [AdvertType.NEED_SITTER])
 
@@ -19,7 +17,6 @@ class NeedSitterAdvertViewSet(viewsets.ModelViewSet):
 
 
 class IsSitterAdvertViewSet(viewsets.ModelViewSet):
-    #IsSitter contains the same vulnerability as NeedSitter before
     queryset = Advert.objects.raw(
         'SELECT * FROM adverts_advert WHERE advertType = %s', [AdvertType.IS_SITTER])
 
